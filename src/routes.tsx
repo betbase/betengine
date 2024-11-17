@@ -5,11 +5,20 @@ import { ErrorNotFoundPage } from '@/pages/ErrorNotFoundPage.tsx';
 import { PageLayout } from '@/components/Layout/PageLayout.tsx';
 import { MatchesPage } from '@/pages/MatchesPage.tsx';
 import { AuthLayout } from '@/components/Layout/AuthLayout.tsx';
+import {
+  Home as HomeIcon,
+  Leaderboard as LeaderboardIcon,
+  SportsEsports as MatchesIcon,
+  Redeem as RewardsIcon,
+  EmojiEvents as TournamentsIcon
+} from '@mui/icons-material';
 
 interface Route {
   id: string;
+  name?: string;
   path: string;
   element: ReactNode;
+  icon?: ReactNode;
 }
 
 interface Routes {
@@ -33,12 +42,14 @@ export const routes: Routes = {
   home: {
     id: 'Home',
     path: '/',
-    element: <HomePage />
+    element: <HomePage />,
+    icon: <HomeIcon />
   },
   matches: {
     id: 'Matches',
     path: '/matches',
-    element: <MatchesPage />
+    element: <MatchesPage />,
+    icon: <MatchesIcon />
   },
   match: {
     id: 'Match',
@@ -48,7 +59,8 @@ export const routes: Routes = {
   tournaments: {
     id: 'Tournaments',
     path: '/tournaments',
-    element: <HomePage />
+    element: <HomePage />,
+    icon: <TournamentsIcon />
   },
   tournament: {
     id: 'Tournament',
@@ -58,12 +70,14 @@ export const routes: Routes = {
   leaderboards: {
     id: 'Leaderboards',
     path: '/leaderboards',
-    element: <HomePage />
+    element: <HomePage />,
+    icon: <LeaderboardIcon />
   },
   rewards: {
     id: 'Rewards',
     path: '/rewards',
-    element: <HomePage />
+    element: <HomePage />,
+    icon: <RewardsIcon />
   },
   profile: {
     id: 'Profile',

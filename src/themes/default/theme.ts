@@ -14,6 +14,16 @@ export const theme = createTheme({
     text: {
       primary: '#FFFFFF',
       secondary: '#A9A9A9'
+    },
+    yellow: {
+      main: '#F2C94C'
+    },
+    midnight: {
+      main: '#0D1426',
+      light: 'rgba(255, 255, 255, 0.05)'
+    },
+    white: {
+      main: '#FFFFFF'
     }
   },
   components: {
@@ -24,5 +34,6 @@ export const theme = createTheme({
         }
       }
     }
-  }
+  },
+  cssVariables: {}
 });

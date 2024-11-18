@@ -40,7 +40,7 @@ export const Navbar = () => {
       position="sticky"
       sx={{
         height: '80px',
-        backgroundColor: 'rgba(255, 255, 255, 0.05)'
+        backgroundColor: theme.palette.midnight.light
       }}>
       <Toolbar
         sx={{ height: '100%', width: '100%', px: { xs: 2, sm: 3, md: 4 } }}>
@@ -54,7 +54,7 @@ export const Navbar = () => {
             display: { xs: 'none', sm: 'none', md: 'flex' },
             textDecoration: 'none',
             fontWeight: 600,
-            color: 'white'
+            color: theme.palette.white.main
           }}>
           BetEngine
         </Typography>
@@ -72,7 +72,7 @@ export const Navbar = () => {
               textDecoration: 'none',
               flexGrow: 1,
               fontWeight: 600,
-              color: 'white'
+              color: theme.palette.white.main
             }}>
             BetEngine
           </Typography>

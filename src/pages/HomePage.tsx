@@ -1,10 +1,9 @@
-import { Typography } from '@mui/material';
+import { LiveMatch } from '@/components/LiveMatch/LiveMatch.tsx';
 
 export const HomePage = () => {
   return (
-    <div>
-      <h2>Hello</h2>
-      <Typography variant="h3">Hello</Typography>
-    </div>
+    <>
+      <LiveMatch />
+    </>
   );
 };

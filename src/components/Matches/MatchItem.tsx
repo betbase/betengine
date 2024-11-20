@@ -13,6 +13,7 @@ import { LiveChip } from '@/components/ui/LiveChip.tsx';
 import { ScheduledChip } from '@/components/ui/ScheduledChip.tsx';
 import { Link } from 'react-router-dom';
 import StarOutlineIcon from '@mui/icons-material/StarOutline';
+import { DiamondSharp } from '@mui/icons-material';
 
 export const MatchItem = () => {
   const theme = useTheme();
@@ -51,7 +52,7 @@ export const MatchItem = () => {
         </Box>
 
         <Box display={TournamentGridMediaQueries}>
-          <Tooltip title="Add to favourites">
+          <Tooltip title="Add to favourites" arrow>
             <IconButton
               sx={{
                 color: theme.palette.yellow.main
@@ -100,7 +101,13 @@ export const MatchItem = () => {
                 </Typography>
               </Link>
               <Button color="primary" variant="outlined">
-                Vote
+                Vote{' '}
+                <DiamondSharp
+                  sx={{
+                    width: '1.125rem',
+                    height: '1rem'
+                  }}
+                />
               </Button>
             </MatchItemTeamBox>
             <Link
@@ -141,7 +148,13 @@ export const MatchItem = () => {
                 </Typography>
               </Link>
               <Button color="primary" variant="outlined">
-                Vote
+                Vote{' '}
+                <DiamondSharp
+                  sx={{
+                    width: '1.125rem',
+                    height: '1rem'
+                  }}
+                />
               </Button>
             </MatchItemTeamBox>
           </MatchItemTeamGrid>
@@ -150,7 +163,7 @@ export const MatchItem = () => {
         <MatchItemFavouriteGrid
           size={{ xs: 2 }}
           display={{ xs: 'none', md: 'flex', lg: 'none', xl: 'flex' }}>
-          <Tooltip title="Add to favourites">
+          <Tooltip title="Add to favourites" arrow>
             <IconButton
               sx={{
                 color: theme.palette.yellow.main

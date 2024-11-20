@@ -10,7 +10,8 @@ export const theme = createTheme({
       }
     },
     body1: {
-      fontSize: '0.875rem'
+      fontSize: '0.875rem',
+      lineHeight: 1.25
     },
     body2: {
       fontSize: '0.75rem'
@@ -45,6 +46,12 @@ export const theme = createTheme({
         body: {
           backgroundColor: '#0D1426',
           marginBottom: '3.5rem'
+        },
+        a: {
+          color: 'white',
+          '&:hover': {
+            color: '#80BAD6'
+          }
         }
       }
     }

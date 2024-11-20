@@ -2,6 +2,7 @@ import { Navbar } from '@/components/Navbar/Navbar.tsx';
 import { Outlet } from 'react-router-dom';
 import { BottomBar } from '@/components/Navbar/BottomBar.tsx';
 import { Grid2 as Grid } from '@mui/material';
+import { Voteslip } from '@/components/Voteslip/Voteslip.tsx';
 
 export const PageLayout = () => {
   return (
@@ -21,7 +22,7 @@ export const PageLayout = () => {
           size={{ lg: 3 }}
           sx={{ display: { xs: 'none', md: 'none', lg: 'block' } }}
           px={2}>
-          Right Widgets
+          <Voteslip />
         </Grid>
       </Grid>
       <BottomBar />

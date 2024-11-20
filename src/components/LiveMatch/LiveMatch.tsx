@@ -11,6 +11,7 @@ import {
 import StarOutlineIcon from '@mui/icons-material/StarOutline';
 import { TwitchPlayer } from 'react-twitch-embed';
 import { LiveChip } from '@/components/ui/LiveChip.tsx';
+import { DiamondSharp } from '@mui/icons-material';
 
 export const LiveMatch = () => {
   const theme = useTheme();
@@ -35,7 +36,7 @@ export const LiveMatch = () => {
           </Typography>
         </Box>
         <Box>
-          <Tooltip title="Add to favourites">
+          <Tooltip title="Add to favourites" arrow>
             <IconButton
               sx={{
                 color: theme.palette.yellow.main
@@ -86,7 +87,13 @@ export const LiveMatch = () => {
                   Team A
                 </Typography>
                 <Button color="primary" variant="outlined">
-                  Vote
+                  Vote{' '}
+                  <DiamondSharp
+                    sx={{
+                      width: '1.125rem',
+                      height: '1rem'
+                    }}
+                  />
                 </Button>
               </Team>
               <Score size={4}>
@@ -130,7 +137,13 @@ export const LiveMatch = () => {
                   Team B
                 </Typography>
                 <Button color="primary" variant="outlined">
-                  Vote
+                  Vote{' '}
+                  <DiamondSharp
+                    sx={{
+                      width: '1.125rem',
+                      height: '1rem'
+                    }}
+                  />
                 </Button>
               </Team>
             </Grid>

@@ -20,14 +20,7 @@ export const MatchItem = () => {
   return (
     <MatchItemWrapper>
       <MatchItemTournamentGrid size={12}>
-        <Box
-          display={{
-            xs: 'flex',
-            sm: 'flex',
-            md: 'none',
-            lg: 'flex',
-            xl: 'none'
-          }}>
+        <Box display={TournamentGridMediaQueries}>
           <ScheduledChip />
         </Box>
 
@@ -52,27 +45,12 @@ export const MatchItem = () => {
               2022 QH Sports Dota 2 Series 3
             </Typography>
           </Link>
-          <Typography
-            variant="body2"
-            display={{
-              xs: 'flex',
-              sm: 'flex',
-              md: 'none',
-              lg: 'flex',
-              xl: 'none'
-            }}>
+          <Typography variant="body2" display={TournamentGridMediaQueries}>
             Jan 11, 04:05 AM
           </Typography>
         </Box>
 
-        <Box
-          display={{
-            xs: 'flex',
-            sm: 'flex',
-            md: 'none',
-            lg: 'flex',
-            xl: 'none'
-          }}>
+        <Box display={TournamentGridMediaQueries}>
           <Tooltip title="Add to favourites">
             <IconButton
               sx={{
@@ -104,7 +82,7 @@ export const MatchItem = () => {
           </MatchItemDateBox>
         </MatchItemDateGrid>
 
-        <MatchItemTeamsGrid size={{ xs: 12, md: 8, lg: 12, xl: 8 }}>
+        <MatchItemTeamsGrid size={{ xs: 12, sm: 8, md: 8, lg: 8, xl: 8 }}>
           <MatchItemTeamGrid size={5}>
             <MatchItemTeamBox>
               <Link
@@ -199,11 +177,20 @@ export const MatchItem = () => {
   );
 };
 
+const TournamentGridMediaQueries = {
+  xs: 'flex',
+  sm: 'flex',
+  md: 'none',
+  lg: 'flex',
+  xl: 'none'
+};
+
 const MatchItemWrapper = styled(Box)(() => ({}));
 
 const MatchItemContainer = styled(Grid)(({ theme }) => ({
   backgroundColor: theme.palette.midnight.dark,
-  padding: '1rem'
+  padding: '1rem',
+  justifyContent: 'center'
 }));
 
 const MatchItemTournamentGrid = styled(Grid)(({ theme }) => ({

@@ -43,7 +43,8 @@ export const theme = createTheme({
     MuiCssBaseline: {
       styleOverrides: {
         body: {
-          backgroundColor: '#0D1426'
+          backgroundColor: '#0D1426',
+          marginBottom: '3.5rem'
         }
       }
     }

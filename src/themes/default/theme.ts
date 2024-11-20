@@ -2,7 +2,19 @@ import { createTheme } from '@mui/material';
 
 export const theme = createTheme({
   typography: {
-    fontFamily: ["'Space Grotesk'", 'sans-serif'].join(',')
+    fontFamily: ["'Space Grotesk'", 'sans-serif'].join(','),
+    h6: {
+      lineHeight: 1.25,
+      '@media (max-width:600px)': {
+        fontSize: '1.125rem'
+      }
+    },
+    body1: {
+      fontSize: '0.875rem'
+    },
+    body2: {
+      fontSize: '0.75rem'
+    }
   },
   shape: {
     borderRadius: 0
@@ -20,7 +32,8 @@ export const theme = createTheme({
     },
     midnight: {
       main: '#0D1426',
-      light: 'rgba(255, 255, 255, 0.05)'
+      dark: '#182031',
+      light: '#252B3C'
     },
     white: {
       main: '#FFFFFF'

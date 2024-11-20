@@ -40,7 +40,7 @@ export const Navbar = () => {
       position="sticky"
       sx={{
         height: '80px',
-        backgroundColor: theme.palette.midnight.light
+        backgroundColor: theme.palette.midnight.dark
       }}>
       <Toolbar
         sx={{ height: '100%', width: '100%', px: { xs: 2, sm: 3, md: 4 } }}>

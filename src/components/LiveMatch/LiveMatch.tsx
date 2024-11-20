@@ -19,7 +19,7 @@ export const LiveMatch = () => {
     <Box
       sx={{
         margin: '1rem 0',
-        backgroundColor: theme.palette.midnight.light
+        backgroundColor: theme.palette.midnight.dark
       }}>
       <LiveMatchHeader>
         <Box
@@ -48,12 +48,12 @@ export const LiveMatch = () => {
 
       <Grid container spacing={2} padding={2}>
         <Grid size={{ xs: 12, lg: 6 }}>
-          <TwitchPlayer
-            channel="hasanabi"
-            parent={['localhost']}
-            width="100%"
-            height="300px"
-          />
+          {/*<TwitchPlayer*/}
+          {/*  channel="hasanabi"*/}
+          {/*  parent={['localhost']}*/}
+          {/*  width="100%"*/}
+          {/*  height="300px"*/}
+          {/*/>*/}
         </Grid>
 
         <Grid size={{ xs: 12, lg: 6 }}>

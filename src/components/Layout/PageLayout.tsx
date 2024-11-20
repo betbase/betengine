@@ -9,17 +9,17 @@ export const PageLayout = () => {
       <Navbar />
       <Grid container spacing={2}>
         <Grid
-          size={{ md: 2 }}
-          sx={{ display: { xs: 'none', md: 'block' } }}
+          size={{ lg: 2 }}
+          sx={{ display: { xs: 'none', md: 'none', lg: 'block' } }}
           px={2}>
           Left Widgets
         </Grid>
-        <Grid size={{ sm: 12, md: 7 }}>
+        <Grid size={{ sm: 12, lg: 7 }}>
           <Outlet />
         </Grid>
         <Grid
-          size={{ md: 3 }}
-          sx={{ display: { xs: 'none', md: 'block' } }}
+          size={{ lg: 3 }}
+          sx={{ display: { xs: 'none', md: 'none', lg: 'block' } }}
           px={2}>
           Right Widgets
         </Grid>

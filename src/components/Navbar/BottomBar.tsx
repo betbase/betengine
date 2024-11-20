@@ -1,10 +1,16 @@
 import { useEffect, useState } from 'react';
 import { Menu as MenuIcon } from '@mui/icons-material';
-import { BottomNavigation, BottomNavigationAction, Box } from '@mui/material';
+import {
+  BottomNavigation,
+  BottomNavigationAction,
+  Box,
+  useTheme
+} from '@mui/material';
 import { navItems } from '@/routes.tsx';
 import { Link, useLocation } from 'react-router-dom';
 
 export const BottomBar = () => {
+  const theme = useTheme();
   const location = useLocation();
 
   const currentRoute = Object.values(navItems).find(
@@ -20,7 +26,7 @@ export const BottomBar = () => {
   return (
     <Box
       sx={{
-        display: { xs: 'flex', md: 'none' },
+        display: { md: 'flex', lg: 'none' },
         position: 'fixed',
         bottom: 0,
         left: 0,
@@ -29,7 +35,7 @@ export const BottomBar = () => {
       <BottomNavigation
         showLabels
         value={value}
-        sx={{ width: '100%', backgroundColor: 'rgba(255, 255, 255, 0.05)' }}>
+        sx={{ width: '100%', backgroundColor: theme.palette.midnight.light }}>
         {navItems.map((page) => (
           <BottomNavigationAction
             key={page.id}

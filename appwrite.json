@@ -18,12 +18,12 @@
         "auth": {
             "methods": {
                 "jwt": true,
-                "phone": true,
+                "phone": false,
                 "invites": true,
-                "anonymous": true,
-                "email-otp": true,
-                "magic-url": true,
-                "email-password": true
+                "anonymous": false,
+                "email-otp": false,
+                "magic-url": false,
+                "email-password": false
             },
             "security": {
                 "duration": 31536000,

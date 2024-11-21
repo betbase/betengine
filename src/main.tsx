@@ -5,12 +5,19 @@ import { router } from '@/routes.tsx';
 import { CssBaseline, ThemeProvider } from '@mui/material';
 import { theme } from '@/themes/default/theme.ts';
 import './index.css';
+import { AuthProvider } from '@/utils/AuthContext.tsx';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <RouterProvider router={router}></RouterProvider>
-    </ThemeProvider>
+    <AuthProvider>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <RouterProvider
+          router={router}
+          future={{
+            v7_startTransition: true
+          }}></RouterProvider>
+      </ThemeProvider>
+    </AuthProvider>
   </StrictMode>
 );

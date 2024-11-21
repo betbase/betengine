@@ -69,7 +69,6 @@ export const Voteslip = () => {
 };
 
 const VoteslipContainer = styled(Box)(({ theme }) => ({
-  margin: '1rem 0',
   backgroundColor: theme.palette.midnight.dark
 }));
 

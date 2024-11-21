@@ -12,6 +12,8 @@ import {
   Redeem as RewardsIcon,
   EmojiEvents as TournamentsIcon
 } from '@mui/icons-material';
+import { LoginPage } from '@/pages/Auth/LoginPage.tsx';
+import { ProtectedRoute } from '@/utils/ProtectedRoute.tsx';
 
 interface Route {
   id: string;
@@ -19,6 +21,7 @@ interface Route {
   path: string;
   element: ReactNode;
   icon?: ReactNode;
+  protected?: boolean;
 }
 
 interface Routes {
@@ -29,7 +32,7 @@ export const authRoutes: Routes = {
   login: {
     id: 'Login',
     path: '/auth/login',
-    element: <HomePage />
+    element: <LoginPage />
   },
   signup: {
     id: 'Signup',
@@ -83,6 +86,7 @@ export const routes: Routes = {
     id: 'Profile',
     path: '/profile',
     element: <HomePage />
+    // protected: true
   }
 };
 
@@ -92,26 +96,50 @@ export const navItems = Object.values(routes).filter((item) =>
   )
 );
 
-export const router = createBrowserRouter([
+export const router = createBrowserRouter(
+  [
+    {
+      path: '/',
+      element: <PageLayout />,
+      errorElement: <ErrorNotFoundPage />,
+      children: Object.values(routes)
+        .filter((route) => !route.protected)
+        .map((route) => {
+          return {
+            ...route,
+            errorElement: <ErrorNotFoundPage />
+          };
+        })
+    },
+    {
+      element: <ProtectedRoute />,
+      children: Object.values(routes)
+        .filter((route) => route.protected)
+        .map((route) => {
+          return {
+            ...route,
+            errorElement: <ErrorNotFoundPage />
+          };
+        })
+    },
+    {
+      path: '/auth',
+      element: <AuthLayout />,
+      children: Object.values(authRoutes).map((route) => {
+        return {
+          ...route,
+          errorElement: <ErrorNotFoundPage />
+        };
+      })
+    }
+  ],
   {
-    path: '/',
-    element: <PageLayout />,
-    errorElement: <ErrorNotFoundPage />,
-    children: Object.values(routes).map((item) => {
-      return {
-        ...item,
-        errorElement: <ErrorNotFoundPage />
-      };
-    })
-  },
-  {
-    path: '/auth',
-    element: <AuthLayout />,
-    children: Object.values(authRoutes).map((item) => {
-      return {
-        ...item,
-        errorElement: <ErrorNotFoundPage />
-      };
-    })
+    future: {
+      v7_fetcherPersist: true,
+      v7_normalizeFormMethod: true,
+      v7_partialHydration: true,
+      v7_relativeSplatPath: true,
+      v7_skipActionErrorRevalidation: true
+    }
   }
-]);
+);

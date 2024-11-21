@@ -14,11 +14,11 @@ import {
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { navItems } from '@/routes.tsx';
-
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
+import { useAuth } from '@/utils/AuthContext.tsx';
 
 export const Navbar = () => {
   const theme = useTheme();
+  const { user, logout } = useAuth();
 
   const location = useLocation();
   const currentRoute = Object.values(navItems).find(
@@ -108,55 +108,75 @@ export const Navbar = () => {
           ))}
         </Box>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-          <Link to="/auth/login" style={{ textDecoration: 'none' }}>
-            <Button
-              color="primary"
-              variant="outlined"
-              sx={{
-                display: { xs: 'none', sm: 'flex' },
-                whiteSpace: 'nowrap'
-              }}>
-              Log in
-            </Button>
-          </Link>
+          {!user?.$id && (
+            <>
+              <Link to="/auth/login" style={{ textDecoration: 'none' }}>
+                <Button
+                  color="primary"
+                  variant="outlined"
+                  sx={{
+                    display: { xs: 'none', sm: 'flex' },
+                    whiteSpace: 'nowrap'
+                  }}>
+                  Log in
+                </Button>
+              </Link>
+              <Link to="/auth/signup" style={{ textDecoration: 'none' }}>
+                <Button
+                  color="success"
+                  variant="contained"
+                  sx={{
+                    display: { xs: 'none', sm: 'flex' },
+                    whiteSpace: 'nowrap'
+                  }}>
+                  Sign Up
+                </Button>
+              </Link>
+            </>
+          )}
+          {user?.$id && (
+            <>
+              <Tooltip title="Open settings">
+                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                  <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                </IconButton>
+              </Tooltip>
+              <Menu
+                sx={{
+                  mt: '45px',
+                  '.MuiPaper-root': {
+                    backgroundColor: theme.palette.midnight.light
+                  }
+                }}
+                id="menu-appbar"
+                anchorEl={anchorElUser}
+                anchorOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right'
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right'
+                }}
+                open={Boolean(anchorElUser)}
+                onClose={handleCloseUserMenu}>
+                <MenuItem
+                  onClick={() => {
+                    handleCloseUserMenu();
+                  }}>
+                  <Typography sx={{ textAlign: 'center' }}>Profile</Typography>
+                </MenuItem>
 
-          <Link to="/auth/signup" style={{ textDecoration: 'none' }}>
-            <Button
-              color="success"
-              variant="contained"
-              sx={{
-                display: { xs: 'none', sm: 'flex' },
-                whiteSpace: 'nowrap'
-              }}>
-              Sign Up
-            </Button>
-          </Link>
-          <Tooltip title="Open settings">
-            <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-              <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
-            </IconButton>
-          </Tooltip>
-          <Menu
-            sx={{ mt: '45px' }}
-            id="menu-appbar"
-            anchorEl={anchorElUser}
-            anchorOrigin={{
-              vertical: 'top',
-              horizontal: 'right'
-            }}
-            keepMounted
-            transformOrigin={{
-              vertical: 'top',
-              horizontal: 'right'
-            }}
-            open={Boolean(anchorElUser)}
-            onClose={handleCloseUserMenu}>
-            {settings.map((setting) => (
-              <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                <Typography sx={{ textAlign: 'center' }}>{setting}</Typography>
-              </MenuItem>
-            ))}
-          </Menu>
+                <MenuItem
+                  onClick={() => {
+                    logout();
+                  }}>
+                  <Typography sx={{ textAlign: 'center' }}>Logout</Typography>
+                </MenuItem>
+              </Menu>
+            </>
+          )}
         </Box>
       </Toolbar>
     </AppBar>

@@ -19,7 +19,6 @@ export const LiveMatch = () => {
   return (
     <Box
       sx={{
-        margin: '1rem 0',
         backgroundColor: theme.palette.midnight.dark
       }}>
       <LiveMatchHeader>

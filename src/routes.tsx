@@ -1,10 +1,10 @@
 import { ReactNode } from 'react';
 import { createBrowserRouter } from 'react-router-dom';
-import { HomePage } from '@/pages/HomePage.tsx';
-import { ErrorNotFoundPage } from '@/pages/ErrorNotFoundPage.tsx';
-import { PageLayout } from '@/components/Layout/PageLayout.tsx';
-import { MatchesPage } from '@/pages/MatchesPage.tsx';
-import { AuthLayout } from '@/components/Layout/AuthLayout.tsx';
+import { HomePage } from '@/pages/HomePage';
+import { ErrorNotFoundPage } from '@/pages/ErrorNotFoundPage';
+import { PageLayout } from '@/components/Layout/PageLayout';
+import { MatchesPage } from '@/pages/MatchesPage';
+import { AuthLayout } from '@/components/Layout/AuthLayout';
 import {
   Home as HomeIcon,
   Leaderboard as LeaderboardIcon,
@@ -12,8 +12,8 @@ import {
   Redeem as RewardsIcon,
   EmojiEvents as TournamentsIcon
 } from '@mui/icons-material';
-import { LoginPage } from '@/pages/Auth/LoginPage.tsx';
-import { ProtectedRoute } from '@/utils/ProtectedRoute.tsx';
+import { LoginPage } from '@/pages/Auth/LoginPage';
+import { ProtectedRoute } from '@/utils/ProtectedRoute';
 
 interface Route {
   id: string;

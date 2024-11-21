@@ -13,8 +13,8 @@ import {
 } from '@mui/material';
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { navItems } from '@/routes.tsx';
-import { useAuth } from '@/utils/AuthContext.tsx';
+import { navItems } from '@/routes';
+import { useAuth } from '@/utils/AuthContext';
 
 export const Navbar = () => {
   const theme = useTheme();

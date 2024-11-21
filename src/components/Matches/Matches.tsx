@@ -1,4 +1,4 @@
-import { MatchItem } from '@/components/Matches/MatchItem.tsx';
+import { MatchItem } from '@/components/Matches/MatchItem';
 import { Box } from '@mui/material';
 
 export const Matches = () => {

@@ -8,9 +8,9 @@ import {
   Typography,
   useTheme
 } from '@mui/material';
-import { storage } from '@/appwrite.ts';
-import { LiveChip } from '@/components/ui/LiveChip.tsx';
-import { ScheduledChip } from '@/components/ui/ScheduledChip.tsx';
+import { storage } from '@/appwrite';
+import { LiveChip } from '@/components/ui/LiveChip';
+import { ScheduledChip } from '@/components/ui/ScheduledChip';
 import { Link } from 'react-router-dom';
 import StarOutlineIcon from '@mui/icons-material/StarOutline';
 import { DiamondSharp } from '@mui/icons-material';

@@ -6,7 +6,7 @@ import {
   Box,
   useTheme
 } from '@mui/material';
-import { navItems } from '@/routes.tsx';
+import { navItems } from '@/routes';
 import { Link, useLocation } from 'react-router-dom';
 
 export const BottomBar = () => {

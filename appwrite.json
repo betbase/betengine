@@ -17,13 +17,13 @@
         },
         "auth": {
             "methods": {
-                "jwt": true,
+                "jwt": false,
                 "phone": false,
-                "invites": true,
+                "invites": false,
                 "anonymous": false,
                 "email-otp": false,
                 "magic-url": false,
-                "email-password": false
+                "email-password": true
             },
             "security": {
                 "duration": 31536000,

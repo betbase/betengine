@@ -10,7 +10,7 @@ import {
 } from '@mui/material';
 import StarOutlineIcon from '@mui/icons-material/StarOutline';
 import { TwitchPlayer } from 'react-twitch-embed';
-import { LiveChip } from '@/components/ui/LiveChip.tsx';
+import { LiveChip } from '@/components/ui/LiveChip';
 import { DiamondSharp } from '@mui/icons-material';
 
 export const LiveMatch = () => {

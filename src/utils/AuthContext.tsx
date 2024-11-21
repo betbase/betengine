@@ -1,14 +1,14 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { account } from '@/appwrite.ts';
-import { Models } from 'appwrite';
-import { AppwriteException } from 'appwrite/src/client.ts';
+import { account } from '@/appwrite';
+import { Models, OAuthProvider, AppwriteException } from 'appwrite';
 
 interface AuthContextType {
   user: Models.User<Models.Preferences> | null;
   loadingUser: boolean;
   processing: boolean;
-  error: AppwriteException | null;
+  error: string | null;
   loginWithEmail: (email: string, password: string) => Promise<void>;
+  loginWithOAuth: (provider: OAuthProvider) => Promise<void>;
   logout: () => Promise<void>;
 }
 
@@ -22,7 +22,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   );
   const [loadingUser, setLoadingUser] = useState(true);
   const [processing, setProcessing] = useState(false);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     getUser();
@@ -32,18 +32,98 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     try {
       setError(null);
       setLoadingUser(true);
+
+      const user = await account.get();
+
+      setUser(user);
+    } catch (e: unknown) {
+      console.error(e);
+      setUser(null);
+      if (e instanceof AppwriteException) {
+        setError(
+          e.message === 'User (role: guests) missing scope (account)'
+            ? null
+            : e.message
+        );
+      }
+    } finally {
+      setLoadingUser(false);
+    }
+  };
+
+  useEffect(() => {
+    const checkAndRefreshSession = async () => {
+      try {
+        setLoadingUser(true);
+        const isExpired = await isSessionExpired();
+
+        if (isExpired) {
+          await refreshSession();
+        }
+      } catch (e: unknown) {
+        console.error('Failed to get session:', e);
+      } finally {
+        setLoadingUser(false);
+      }
+    };
+
+    // Run the function immediately once
+    checkAndRefreshSession();
+
+    // Set the interval to run the function periodically
+    const interval = setInterval(checkAndRefreshSession, 60 * 1000); // Check every minute
+
+    return () => clearInterval(interval);
+  }, []);
+
+  const isSessionExpired = async () => {
+    const session = await account.getSession('current');
+
+    if (session.providerAccessTokenExpiry) {
+      const expiryTime = new Date(session.providerAccessTokenExpiry);
+      const currentTime = new Date();
+      const timeDifference = expiryTime.getTime() - currentTime.getTime();
+
+      // Refresh the session if the token is about to expire in the next 5 minutes
+      return timeDifference < 5 * 60 * 1000;
+    }
+
+    return false;
+  };
+
+  const refreshSession = async () => {
+    try {
+      const session = await account.updateSession('current');
+      console.log('Session refreshed:', session);
+    } catch (e: unknown) {
+      console.error('Failed to refresh session:', e);
+    }
+  };
+
+  const loginWithOAuth = async (provider: OAuthProvider) => {
+    try {
+      setError(null);
+      setProcessing(true);
+      await account.createOAuth2Session(
+        provider,
+        'http://localhost:3000/',
+        'http://localhost:3000/auth/login'
+        // getScopes(provider)
+      );
       const user = await account.get();
       setUser(user);
-      setLoadingUser(false);
-    } catch (error: AppwriteException) {
+      setProcessing(false);
+    } catch (e: unknown) {
       console.error(error);
-      setUser(null);
-      setError(
-        error.message === 'User (role: guests) missing scope (account)'
-          ? null
-          : error.message
-      );
-      setLoadingUser(false);
+      setProcessing(false);
+
+      if (e instanceof AppwriteException) {
+        setError(
+          e.message === 'User (role: guests) missing scope (account)'
+            ? null
+            : e.message
+        );
+      }
     }
   };
 
@@ -55,10 +135,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       const user = await account.get();
       setUser(user);
       setProcessing(false);
-    } catch (error: AppwriteException) {
-      console.error(error.message);
+    } catch (e: unknown) {
+      console.error(e);
       setProcessing(false);
-      setError(error.message);
+      if (e instanceof AppwriteException) {
+        setError(e.message);
+      }
     }
   };
 
@@ -66,15 +148,25 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     try {
       await account.deleteSession('current');
       setUser(null);
-    } catch (error: AppwriteException) {
-      console.error(error);
-      setError(error.message);
+    } catch (e: unknown) {
+      console.error(e);
+      if (e instanceof AppwriteException) {
+        setError(e.message);
+      }
     }
   };
 
   return (
     <AuthContext.Provider
-      value={{ user, loadingUser, processing, error, loginWithEmail, logout }}>
+      value={{
+        user,
+        loadingUser,
+        processing,
+        error,
+        loginWithEmail,
+        loginWithOAuth,
+        logout
+      }}>
       {children}
     </AuthContext.Provider>
   );

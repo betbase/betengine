@@ -8,7 +8,7 @@ import {
   Typography,
   useTheme
 } from '@mui/material';
-import { LiveChip } from '@/components/ui/LiveChip.tsx';
+import { LiveChip } from '@/components/ui/LiveChip';
 import {
   ConfirmationNumber,
   DiamondSharp,

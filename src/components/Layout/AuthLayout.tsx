@@ -1,6 +1,6 @@
 import { Outlet, useNavigate } from 'react-router-dom';
-import { Navbar } from '@/components/Navbar/Navbar.tsx';
-import { useAuth } from '@/utils/AuthContext.tsx';
+import { Navbar } from '@/components/Navbar/Navbar';
+import { useAuth } from '@/utils/AuthContext';
 import { Box } from '@mui/material';
 
 export const AuthLayout = () => {

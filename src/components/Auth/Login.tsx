@@ -3,18 +3,16 @@ import {
   Box,
   Button,
   Divider,
-  IconButton,
-  Paper,
   TextField,
   Typography,
   useTheme
 } from '@mui/material';
-import { Facebook, Google, X } from '@mui/icons-material';
-import { Link } from 'react-router-dom';
-import { useAuth } from '@/utils/AuthContext.tsx';
+import { Facebook, Google } from '@mui/icons-material';
+import { Link, useSearchParams } from 'react-router-dom';
+import { useAuth } from '@/utils/AuthContext';
 import { LoadingButton } from '@mui/lab';
-import { FormEvent, useEffect } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { OAuthProvider } from 'appwrite';
 
 interface LoginFormInputs {
   email: string;
@@ -23,7 +21,12 @@ interface LoginFormInputs {
 
 export const Login = () => {
   const theme = useTheme();
-  const { processing, error, loginWithEmail } = useAuth();
+  const { processing, error, loginWithEmail, loginWithOAuth } = useAuth();
+
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  // Create a function that parses the error
+  const oauthError = searchParams.get('error');
 
   const {
     register,
@@ -98,7 +101,11 @@ export const Login = () => {
         </LoadingButton>
       </Box>
 
-      {error && <Alert severity="error">{error}</Alert>}
+      {(error || oauthError) && (
+        <Alert severity="error" sx={{ maxWidth: '100%' }}>
+          {error || oauthError}
+        </Alert>
+      )}
       <Divider
         sx={{
           width: '100%',
@@ -120,10 +127,22 @@ export const Login = () => {
           color="primary"
           variant="outlined"
           fullWidth
+          onClick={() => loginWithOAuth(OAuthProvider.Discord)}
           sx={{
             justifyContent: 'center'
           }}>
-          <Facebook sx={{ marginRight: '0.25rem' }} /> Log in with Facebook
+          Log in with Discord
+        </Button>
+
+        <Button
+          color="primary"
+          variant="outlined"
+          fullWidth
+          onClick={() => loginWithOAuth(OAuthProvider.Twitch)}
+          sx={{
+            justifyContent: 'center'
+          }}>
+          Log in with Twitch
         </Button>
 
         <Button
@@ -133,7 +152,7 @@ export const Login = () => {
           sx={{
             justifyContent: 'center'
           }}>
-          <X sx={{ marginRight: '0.25rem' }} /> Log in with X
+          <Facebook sx={{ marginRight: '0.25rem' }} /> Log in with Facebook
         </Button>
 
         <Button

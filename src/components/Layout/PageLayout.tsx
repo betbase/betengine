@@ -1,9 +1,9 @@
-import { Navbar } from '@/components/Navbar/Navbar.tsx';
+import { Navbar } from '@/components/Navbar/Navbar';
 import { Outlet } from 'react-router-dom';
-import { BottomBar } from '@/components/Navbar/BottomBar.tsx';
+import { BottomBar } from '@/components/Navbar/BottomBar';
 import { Grid2 as Grid } from '@mui/material';
-import { Voteslip } from '@/components/Voteslip/Voteslip.tsx';
-import { useAuth } from '@/utils/AuthContext.tsx';
+import { Voteslip } from '@/components/Voteslip/Voteslip';
+import { useAuth } from '@/utils/AuthContext';
 
 export const PageLayout = () => {
   const { loadingUser } = useAuth();

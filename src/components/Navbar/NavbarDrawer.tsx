@@ -6,7 +6,7 @@ import {
   ListItemButton,
   ListItemText
 } from '@mui/material';
-import { navItems } from '@/routes.tsx';
+import { navItems } from '@/routes';
 
 interface NavbarDrawerProps {
   drawerOpen: boolean;

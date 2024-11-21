@@ -1,4 +1,4 @@
-import { Login } from '@/components/Auth/Login.tsx';
+import { Login } from '@/components/Auth/Login';
 import { Box } from '@mui/material';
 
 export const LoginPage = () => {

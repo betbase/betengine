@@ -17,11 +17,11 @@
         },
         "auth": {
             "methods": {
-                "jwt": false,
+                "jwt": true,
                 "phone": false,
                 "invites": false,
                 "anonymous": false,
-                "email-otp": false,
+                "email-otp": true,
                 "magic-url": false,
                 "email-password": true
             },

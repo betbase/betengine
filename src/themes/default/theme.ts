@@ -18,6 +18,11 @@ const palette = {
   },
   white: {
     main: '#FFFFFF'
+  },
+  error: {
+    main: '#D32F2F',
+    light: '#EF5350',
+    dark: '#C62828'
   }
 };
 
@@ -43,6 +48,19 @@ export const theme = createTheme({
   },
   palette,
   components: {
+    MuiFormHelperText: {
+      styleOverrides: {
+        root: {
+          width: '100%',
+          color: palette.white.main,
+          backgroundColor: palette.error.light,
+          margin: 0,
+          fontSize: '0.875rem',
+          fontWeight: 600,
+          padding: '0 0.5rem'
+        }
+      }
+    },
     MuiButton: {
       styleOverrides: {
         root: {
@@ -58,7 +76,6 @@ export const theme = createTheme({
     MuiCssBaseline: {
       styleOverrides: {
         '.MuiOutlinedInput-root': {
-          // backgroundColor: palette.white.main,
           '& input': {
             fontWeight: 600,
             color: palette.white.main

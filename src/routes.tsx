@@ -14,6 +14,7 @@ import {
 } from '@mui/icons-material';
 import { LoginPage } from '@/pages/Auth/LoginPage';
 import { ProtectedRoute } from '@/utils/ProtectedRoute';
+import { SignupPage } from '@/pages/Auth/SignupPage';
 
 interface Route {
   id: string;
@@ -37,7 +38,12 @@ export const authRoutes: Routes = {
   signup: {
     id: 'Signup',
     path: '/auth/signup',
-    element: <HomePage />
+    element: <SignupPage />
+  },
+  forgot: {
+    id: 'Forgot',
+    path: '/auth/forgot',
+    element: <LoginPage />
   }
 };
 

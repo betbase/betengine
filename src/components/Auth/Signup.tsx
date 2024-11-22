@@ -13,15 +13,29 @@ import { useAuth } from '@/utils/AuthContext';
 import { LoadingButton } from '@mui/lab';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { OAuthProvider } from 'appwrite';
+import * as yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
 
-interface LoginFormInput {
+interface SignUpFormInput {
+  username: string;
   email: string;
   password: string;
+  confirmPassword: string;
 }
 
-export const Login = () => {
+const validationSchema = yup.object({
+  username: yup.string().min(3).max(20).required('Username is required'),
+  email: yup.string().email().required('Email is required'),
+  password: yup.string().required('Password is required'),
+  confirmPassword: yup
+    .string()
+    .oneOf([yup.ref('password')], 'Passwords must match')
+    .required('Confirm Password is required')
+});
+
+export const Signup = () => {
   const theme = useTheme();
-  const { processing, error, loginWithEmail, loginWithOAuth } = useAuth();
+  const { processing, error, signUpWithEmail, loginWithOAuth } = useAuth();
 
   const [searchParams] = useSearchParams();
 
@@ -32,10 +46,13 @@ export const Login = () => {
     register,
     handleSubmit,
     formState: { errors }
-  } = useForm<LoginFormInput>();
+  } = useForm<SignUpFormInput>({
+    resolver: yupResolver(validationSchema)
+  });
 
-  const onSubmit: SubmitHandler<LoginFormInput> = (data) => {
-    loginWithEmail(data.email, data.password);
+  const onSubmit: SubmitHandler<SignUpFormInput> = (data) => {
+    // validate password and update form state if invalid
+    signUpWithEmail(data.username, data.email, data.password);
   };
 
   return (
@@ -51,10 +68,10 @@ export const Login = () => {
       }}>
       <Box>
         <Typography variant="h5" textAlign="center" mb="0.5rem">
-          <strong>Log In</strong>
+          <strong>Sign Up</strong>
         </Typography>
         <Typography variant="body1" textAlign="center" sx={{ fontWeight: 600 }}>
-          Welcome to BetEngine. <br /> Log in to place predictions and win
+          Welcome to BetEngine. <br /> Sign up to place predictions and win
           rewards!
         </Typography>
       </Box>
@@ -70,25 +87,42 @@ export const Login = () => {
           gap: '1rem'
         }}>
         <TextField
+          label="Username"
+          {...register('username')}
+          variant="outlined"
+          margin="normal"
+          helperText={errors.username?.message}
+          fullWidth
+          sx={{ margin: 0 }}
+        />
+        <TextField
           label="Email"
-          {...register('email', { required: 'Email is required' })}
+          {...register('email')}
           type="email"
           variant="outlined"
           margin="normal"
           helperText={errors.email?.message}
           fullWidth
-          required
           sx={{ margin: 0 }}
         />
         <TextField
-          {...register('password', { required: 'Password is required' })}
+          {...register('password')}
           label="Password"
           type="password"
           variant="outlined"
           margin="normal"
           helperText={errors.password?.message}
           fullWidth
-          required
+          sx={{ margin: 0 }}
+        />
+        <TextField
+          {...register('confirmPassword')}
+          label="Confirm Password"
+          type="password"
+          variant="outlined"
+          margin="normal"
+          helperText={errors.confirmPassword?.message}
+          fullWidth
           sx={{ margin: 0 }}
         />
         <LoadingButton
@@ -97,7 +131,7 @@ export const Login = () => {
           variant="contained"
           loading={processing}
           fullWidth>
-          Log in
+          Sign Up
         </LoadingButton>
         <Typography
           variant="body1"
@@ -105,7 +139,7 @@ export const Login = () => {
             fontWeight: 600,
             margin: 0
           }}>
-          <Link to="/auth/forgot">Forgot your password?</Link>
+          Already have an account? <Link to="/auth/login">Log in</Link>
         </Typography>
       </Box>
 
@@ -139,7 +173,7 @@ export const Login = () => {
           sx={{
             justifyContent: 'center'
           }}>
-          Log in with Discord
+          Sign up with Discord
         </Button>
 
         <Button
@@ -150,7 +184,7 @@ export const Login = () => {
           sx={{
             justifyContent: 'center'
           }}>
-          Log in with Twitch
+          Sign up with Twitch
         </Button>
 
         <Button
@@ -160,7 +194,7 @@ export const Login = () => {
           sx={{
             justifyContent: 'center'
           }}>
-          <Facebook sx={{ marginRight: '0.25rem' }} /> Log in with Facebook
+          <Facebook sx={{ marginRight: '0.25rem' }} /> Sign up with Facebook
         </Button>
 
         <Button
@@ -170,15 +204,8 @@ export const Login = () => {
           sx={{
             justifyContent: 'center'
           }}>
-          <Google sx={{ marginRight: '0.25rem' }} /> Log in with Google
+          <Google sx={{ marginRight: '0.25rem' }} /> Sign up with Google
         </Button>
-
-        <Typography
-          variant="body1"
-          textAlign="center"
-          sx={{ fontWeight: 600, marginTop: '0.5rem' }}>
-          Don't have an account? <Link to="/auth/signup">Sign up</Link>
-        </Typography>
       </Box>
     </Box>
   );

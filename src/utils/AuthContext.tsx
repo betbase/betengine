@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { account } from '@/appwrite';
-import { Models, OAuthProvider, AppwriteException } from 'appwrite';
+import { Models, OAuthProvider, AppwriteException, ID } from 'appwrite';
 
 interface AuthContextType {
   user: Models.User<Models.Preferences> | null;
@@ -9,6 +9,11 @@ interface AuthContextType {
   error: string | null;
   loginWithEmail: (email: string, password: string) => Promise<void>;
   loginWithOAuth: (provider: OAuthProvider) => Promise<void>;
+  signUpWithEmail: (
+    username: string,
+    email: string,
+    password: string
+  ) => Promise<void>;
   logout: () => Promise<void>;
 }
 
@@ -28,36 +33,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     getUser();
   }, []);
 
-  const getUser = async () => {
-    try {
-      setError(null);
-      setLoadingUser(true);
-
-      const user = await account.get();
-
-      setUser(user);
-    } catch (e: unknown) {
-      console.error(e);
-      setUser(null);
-      if (e instanceof AppwriteException) {
-        setError(
-          e.message === 'User (role: guests) missing scope (account)'
-            ? null
-            : e.message
-        );
-      }
-    } finally {
-      setLoadingUser(false);
-    }
-  };
-
   useEffect(() => {
     const checkAndRefreshSession = async () => {
       try {
-        setLoadingUser(true);
         const isExpired = await isSessionExpired();
 
         if (isExpired) {
+          setLoadingUser(true);
           await refreshSession();
         }
       } catch (e: unknown) {
@@ -89,6 +71,29 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     }
 
     return false;
+  };
+
+  const getUser = async () => {
+    try {
+      setError(null);
+      setLoadingUser(true);
+
+      const user = await account.get();
+
+      setUser(user);
+    } catch (e: unknown) {
+      console.error(e);
+      setUser(null);
+      if (e instanceof AppwriteException) {
+        setError(
+          e.message === 'User (role: guests) missing scope (account)'
+            ? null
+            : e.message
+        );
+      }
+    } finally {
+      setLoadingUser(false);
+    }
   };
 
   const refreshSession = async () => {
@@ -144,6 +149,35 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   };
 
+  const signUpWithEmail = async (
+    username: string,
+    email: string,
+    password: string
+  ) => {
+    try {
+      setError(null);
+      setProcessing(true);
+      const createdUser = await account.create(
+        ID.unique(),
+        email,
+        password,
+        username
+      );
+
+      if (createdUser?.$id) {
+        setUser(createdUser);
+      }
+
+      setProcessing(false);
+    } catch (e: unknown) {
+      console.error(e);
+      setProcessing(false);
+      if (e instanceof AppwriteException) {
+        setError(e.message);
+      }
+    }
+  };
+
   const logout = async () => {
     try {
       await account.deleteSession('current');
@@ -165,6 +199,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         error,
         loginWithEmail,
         loginWithOAuth,
+        signUpWithEmail,
         logout
       }}>
       {children}

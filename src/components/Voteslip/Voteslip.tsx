@@ -15,6 +15,7 @@ import {
   HelpOutline
 } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
+import { authRoutes } from '@/routes';
 
 export const Voteslip = () => {
   const theme = useTheme();
@@ -59,8 +60,10 @@ export const Voteslip = () => {
           }}>
           <Typography variant="h6">No predictions added</Typography>
           <Typography variant="body1">
-            To place a prediction, <Link to="/auth/signup">sign up</Link> or{' '}
-            <Link to="/auth/login">log in</Link>, and click on any prediction.
+            To place a prediction,{' '}
+            <Link to={authRoutes.signup.path}>sign up</Link> or{' '}
+            <Link to={authRoutes.login.path}>log in</Link>, and click on any
+            prediction.
           </Typography>
         </Box>
       </VoteslipPredictionsContainer>

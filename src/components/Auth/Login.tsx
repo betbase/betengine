@@ -13,6 +13,7 @@ import { useAuth } from '@/utils/AuthContext';
 import { LoadingButton } from '@mui/lab';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { OAuthProvider } from 'appwrite';
+import { authRoutes } from '@/routes';
 
 interface LoginFormInput {
   email: string;
@@ -105,7 +106,7 @@ export const Login = () => {
             fontWeight: 600,
             margin: 0
           }}>
-          <Link to="/auth/forgot">Forgot your password?</Link>
+          <Link to={authRoutes.forgot.path}>Forgot your password?</Link>
         </Typography>
       </Box>
 
@@ -177,7 +178,8 @@ export const Login = () => {
           variant="body1"
           textAlign="center"
           sx={{ fontWeight: 600, marginTop: '0.5rem' }}>
-          Don't have an account? <Link to="/auth/signup">Sign up</Link>
+          Don't have an account?{' '}
+          <Link to={authRoutes.signup.path}>Sign up</Link>
         </Typography>
       </Box>
     </Box>

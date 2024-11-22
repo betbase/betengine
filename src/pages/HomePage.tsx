@@ -1,14 +1,17 @@
 import { LiveMatch } from '@/components/LiveMatch/LiveMatch';
 import { Matches } from '@/components/Matches/Matches';
-import { useAuth } from '@/utils/AuthContext';
+import { Box } from '@mui/material';
 
 export const HomePage = () => {
-  const { user, loadingUser, loginWithEmail, logout } = useAuth();
-
   return (
-    <>
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        rowGap: '1rem'
+      }}>
       <LiveMatch />
       <Matches />
-    </>
+    </Box>
   );
 };

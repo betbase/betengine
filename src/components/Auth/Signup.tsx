@@ -15,6 +15,7 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { OAuthProvider } from 'appwrite';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { authRoutes } from '@/routes';
 
 interface SignUpFormInput {
   username: string;
@@ -139,7 +140,8 @@ export const Signup = () => {
             fontWeight: 600,
             margin: 0
           }}>
-          Already have an account? <Link to="/auth/login">Log in</Link>
+          Already have an account?{' '}
+          <Link to={authRoutes.login.path}>Log in</Link>
         </Typography>
       </Box>
 

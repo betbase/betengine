@@ -13,7 +13,7 @@ import {
 } from '@mui/material';
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { navItems } from '@/routes';
+import { authRoutes, navItems } from '@/routes';
 import { useAuth } from '@/utils/AuthContext';
 
 export const Navbar = () => {
@@ -110,7 +110,9 @@ export const Navbar = () => {
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
           {!user?.$id && (
             <>
-              <Link to="/auth/login" style={{ textDecoration: 'none' }}>
+              <Link
+                to={authRoutes.login.path}
+                style={{ textDecoration: 'none' }}>
                 <Button
                   color="primary"
                   variant="outlined"
@@ -121,7 +123,9 @@ export const Navbar = () => {
                   Log in
                 </Button>
               </Link>
-              <Link to="/auth/signup" style={{ textDecoration: 'none' }}>
+              <Link
+                to={authRoutes.signup.path}
+                style={{ textDecoration: 'none' }}>
                 <Button
                   color="success"
                   variant="contained"

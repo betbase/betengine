@@ -157,17 +157,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     try {
       setError(null);
       setProcessing(true);
-      const createdUser = await account.create(
-        ID.unique(),
-        email,
-        password,
-        username
-      );
 
-      if (createdUser?.$id) {
-        setUser(createdUser);
-      }
+      await account.create(ID.unique(), email, password, username);
+      await account.createEmailPasswordSession(email, password);
+      const user = await account.get();
 
+      setUser(user);
       setProcessing(false);
     } catch (e: unknown) {
       console.error(e);

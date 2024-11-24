@@ -10,12 +10,14 @@ import {
 } from '@mui/material';
 import { LiveChip } from '@/components/ui/LiveChip';
 import {
+  Close,
   ConfirmationNumber,
   DiamondSharp,
   HelpOutline
 } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
 import { authRoutes } from '@/routes';
+import { VoteslipItem } from '@/components/Voteslip/VoteslipItem';
 
 export const Voteslip = () => {
   const theme = useTheme();
@@ -50,22 +52,18 @@ export const Voteslip = () => {
 
       <VoteslipPredictionsContainer>
         {/* No predictions */}
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '0.5rem',
-            alignItems: 'center',
-            textAlign: 'center'
-          }}>
-          <Typography variant="h6">No predictions added</Typography>
-          <Typography variant="body1">
-            To place a prediction,{' '}
-            <Link to={authRoutes.signup.path}>sign up</Link> or{' '}
-            <Link to={authRoutes.login.path}>log in</Link>, and click on any
-            prediction.
-          </Typography>
-        </Box>
+        {/*<VoteslipNoPredictionsContainer>*/}
+        {/*  <Typography variant="h6">No predictions added</Typography>*/}
+        {/*  <Typography variant="body1">*/}
+        {/*    To place a prediction,{' '}*/}
+        {/*    <Link to={authRoutes.signup.path}>sign up</Link> or{' '}*/}
+        {/*    <Link to={authRoutes.login.path}>log in</Link>, and click on any*/}
+        {/*    prediction.*/}
+        {/*  </Typography>*/}
+        {/*</VoteslipNoPredictionsContainer>*/}
+
+        <VoteslipItem />
+        <VoteslipItem />
       </VoteslipPredictionsContainer>
     </VoteslipContainer>
   );
@@ -106,5 +104,14 @@ const VoteslipHeading = styled(Typography)(({ theme }) => ({
 const VoteslipPredictionsContainer = styled(Box)(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
-  padding: '1rem'
+  padding: '1rem',
+  gap: '1rem'
+}));
+
+const VoteslipNoPredictionsContainer = styled(Box)(({ theme }) => ({
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '0.5rem',
+  alignItems: 'center',
+  textAlign: 'center'
 }));

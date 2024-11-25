@@ -19,7 +19,8 @@ export const VoteslipItem = () => {
           variant="h6"
           sx={{
             flexGrow: 1,
-            textAlign: 'center'
+            textAlign: 'center',
+            fontSize: '1rem'
           }}>
           Match Winner
         </Typography>
@@ -33,9 +34,9 @@ export const VoteslipItem = () => {
 
       <VoteslipPredictionItemContents>
         <VoteslipPredictionItemTeamContainer>
-          <VoteslipPredictionItemTeamHeader variant="h6" fontWeight={600}>
+          <VoteslipPredictionItemWinnerHeader variant="h6" fontWeight={600}>
             Fnatic Rising
-          </VoteslipPredictionItemTeamHeader>
+          </VoteslipPredictionItemWinnerHeader>
         </VoteslipPredictionItemTeamContainer>
 
         <VoteslipPredictionItemTeamsGrid container spacing={2}>
@@ -111,7 +112,6 @@ const VoteslipPredictionItemHeader = styled(Box)(({ theme }) => ({
   alignItems: 'center',
   width: '100%',
   justifyContent: 'space-between',
-  padding: '0.25rem',
   borderBottom: `1px solid ${theme.palette.white.main}`
 }));
 
@@ -128,10 +128,10 @@ const VoteslipPredictionItemTeamContainer = styled(Box)(({ theme }) => ({
   alignItems: 'center'
 }));
 
-const VoteslipPredictionItemTeamHeader = styled(Typography)(({ theme }) => ({
+const VoteslipPredictionItemWinnerHeader = styled(Typography)(({ theme }) => ({
   width: '100%',
   border: `1px solid ${theme.palette.primary.main}`,
-  padding: '0.75rem',
+  padding: '0.5rem',
   fontSize: '1rem',
   textAlign: 'center'
 }));

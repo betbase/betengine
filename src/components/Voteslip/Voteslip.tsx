@@ -1,6 +1,7 @@
 import {
   Alert,
   Box,
+  Button,
   Chip,
   Grid2 as Grid,
   IconButton,
@@ -70,7 +71,9 @@ export const Voteslip = () => {
           sx={{
             display: 'flex',
             flexDirection: 'column',
-            gap: '0.5rem'
+            gap: '0.75rem',
+            borderTop: `1px dashed ${theme.palette.primary.main}`,
+            paddingTop: '1rem'
           }}>
           <Box
             sx={{
@@ -79,14 +82,20 @@ export const Voteslip = () => {
               justifyContent: 'space-between',
               alignItems: 'center'
             }}>
-            <Typography variant="h6" fontWeight={600}>
+            <Typography
+              variant="h6"
+              fontWeight={600}
+              sx={{
+                color: theme.palette.white.main
+              }}>
               Total Stake
             </Typography>
             <Typography
               variant="h6"
               sx={{
                 display: 'flex',
-                alignItems: 'center'
+                alignItems: 'center',
+                color: theme.palette.white.main
               }}>
               <DiamondSharp />
               100
@@ -112,12 +121,23 @@ export const Voteslip = () => {
               variant="h6"
               sx={{
                 display: 'flex',
-                alignItems: 'center'
+                alignItems: 'center',
+                color: theme.palette.success.light
               }}>
               <DiamondSharp />
               100
             </Typography>
           </Box>
+
+          <Button
+            color="primary"
+            variant="contained"
+            sx={{
+              fontWeight: 700,
+              fontSize: '1rem'
+            }}>
+            PLACE BETS
+          </Button>
         </Box>
       </VoteslipPredictionsContainer>
     </VoteslipContainer>

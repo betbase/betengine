@@ -19,6 +19,11 @@ const palette = {
   white: {
     main: '#FFFFFF'
   },
+  success: {
+    main: '#2E7d32',
+    dark: '#1B5E20',
+    light: '#4CAF50'
+  },
   error: {
     main: '#D32F2F',
     light: '#EF5350',

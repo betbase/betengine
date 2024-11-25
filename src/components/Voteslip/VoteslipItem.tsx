@@ -33,15 +33,14 @@ export const VoteslipItem = () => {
 
       <VoteslipPredictionItemContents>
         <VoteslipPredictionItemTeamContainer>
-          <VoteslipPredictionItemTeamHeader variant="h6">
+          <VoteslipPredictionItemTeamHeader variant="h6" fontWeight={600}>
             Fnatic Rising
           </VoteslipPredictionItemTeamHeader>
         </VoteslipPredictionItemTeamContainer>
 
         <VoteslipPredictionItemTeamsGrid container spacing={2}>
           <Grid size={5}>
-            <img src="https://placehold.co/40" alt="Team A" />
-            <Typography variant="h6" fontWeight={600}>
+            <Typography variant="h6" fontWeight={600} fontSize="1rem">
               Fnatic Rising
             </Typography>
           </Grid>
@@ -50,6 +49,7 @@ export const VoteslipItem = () => {
             <Typography
               variant="h6"
               fontWeight={600}
+              fontSize="1rem"
               sx={{
                 fontFamily: "'Iperion W00', sans-serif"
               }}>
@@ -58,24 +58,15 @@ export const VoteslipItem = () => {
           </Grid>
 
           <Grid size={5}>
-            <img src="https://placehold.co/40" alt="Team A" />
-            <Typography variant="h6" fontWeight={600}>
+            <Typography variant="h6" fontWeight={600} fontSize="1rem">
               Faze
             </Typography>
           </Grid>
         </VoteslipPredictionItemTeamsGrid>
-        <VoteslipPredictionitemStakeContainer
-          sx={{
-            display: 'flex',
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'flex-end',
-            borderTop: '1px dashed white',
-            paddingTop: '1rem'
-          }}>
+        <VoteslipPredictionitemStakeContainer>
           <VoteslipPredictionItemStakeButton
             sx={{
-              borderLeft: '1px solid white'
+              borderLeft: `1px solid ${theme.palette.white.main}`
             }}>
             <Remove
               sx={{
@@ -94,7 +85,7 @@ export const VoteslipItem = () => {
           />
           <VoteslipPredictionItemStakeButton
             sx={{
-              borderRight: '1px solid white'
+              borderRight: `1px solid ${theme.palette.white.main}`
             }}>
             <Add
               sx={{
@@ -141,6 +132,7 @@ const VoteslipPredictionItemTeamHeader = styled(Typography)(({ theme }) => ({
   width: '100%',
   border: `1px solid ${theme.palette.primary.main}`,
   padding: '0.75rem',
+  fontSize: '1rem',
   textAlign: 'center'
 }));
 
@@ -157,14 +149,14 @@ const VoteslipPredictionitemStakeContainer = styled(Box)(({ theme }) => ({
   flexDirection: 'row',
   alignItems: 'center',
   justifyContent: 'flex-end',
-  borderTop: '1px dashed white',
+  borderTop: `1px dashed ${theme.palette.white.main}`,
   paddingTop: '1rem'
 }));
 
 const VoteslipPredictionItemStakeButton = styled(IconButton)(({ theme }) => ({
-  borderTop: '1px solid white',
+  borderTop: `1px solid ${theme.palette.white.main}`,
   borderRadius: 0,
-  borderBottom: '1px solid white',
+  borderBottom: `1px solid ${theme.palette.white.main}`,
   padding: '0.35rem',
   '&:hover': {
     backgroundColor: theme.palette.primary.main

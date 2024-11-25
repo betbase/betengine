@@ -4,6 +4,9 @@ const palette = {
   primary: {
     main: '#80BAD6'
   },
+  secondary: {
+    main: '#A9A9A9'
+  },
   text: {
     primary: '#FFFFFF',
     secondary: '#A9A9A9'

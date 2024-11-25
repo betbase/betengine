@@ -71,7 +71,7 @@ export const Voteslip = () => {
           sx={{
             display: 'flex',
             flexDirection: 'column',
-            gap: '0.75rem',
+            gap: '0.5rem',
             borderTop: `1px dashed ${theme.palette.primary.main}`,
             paddingTop: '1rem'
           }}>
@@ -86,7 +86,8 @@ export const Voteslip = () => {
               variant="h6"
               fontWeight={600}
               sx={{
-                color: theme.palette.white.main
+                color: theme.palette.white.main,
+                fontSize: '1rem'
               }}>
               Total Stake
             </Typography>
@@ -95,7 +96,8 @@ export const Voteslip = () => {
               sx={{
                 display: 'flex',
                 alignItems: 'center',
-                color: theme.palette.white.main
+                color: theme.palette.white.main,
+                fontSize: '1rem'
               }}>
               <DiamondSharp />
               100
@@ -113,7 +115,8 @@ export const Voteslip = () => {
               variant="h6"
               fontWeight={600}
               sx={{
-                color: theme.palette.success.light
+                color: theme.palette.success.light,
+                fontSize: '1rem'
               }}>
               Potential Win
             </Typography>
@@ -122,7 +125,8 @@ export const Voteslip = () => {
               sx={{
                 display: 'flex',
                 alignItems: 'center',
-                color: theme.palette.success.light
+                color: theme.palette.success.light,
+                fontSize: '1rem'
               }}>
               <DiamondSharp />
               100

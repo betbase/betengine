@@ -47,28 +47,18 @@
     "collections": [
         {
             "$id": "games",
-            "$permissions": [
-                "read(\"any\")"
-            ],
+            "$permissions": [],
             "databaseId": "betengine",
-            "name": "Games",
+            "name": "games",
             "enabled": true,
             "documentSecurity": false,
             "attributes": [
-                {
-                    "key": "titleId",
-                    "type": "string",
-                    "required": true,
-                    "array": false,
-                    "size": 6,
-                    "default": null
-                },
                 {
                     "key": "name",
                     "type": "string",
                     "required": true,
                     "array": false,
-                    "size": 64,
+                    "size": 32,
                     "default": null
                 },
                 {
@@ -76,7 +66,7 @@
                     "type": "string",
                     "required": true,
                     "array": false,
-                    "size": 32,
+                    "size": 16,
                     "default": null
                 },
                 {
@@ -84,45 +74,11 @@
                     "type": "string",
                     "required": true,
                     "array": false,
-                    "size": 32,
+                    "size": 16,
                     "default": null
                 }
             ],
-            "indexes": [
-                {
-                    "key": "titleId_unique",
-                    "type": "unique",
-                    "status": "available",
-                    "attributes": [
-                        "titleId"
-                    ],
-                    "orders": [
-                        "ASC"
-                    ]
-                },
-                {
-                    "key": "name_unique",
-                    "type": "unique",
-                    "status": "available",
-                    "attributes": [
-                        "name"
-                    ],
-                    "orders": [
-                        "ASC"
-                    ]
-                },
-                {
-                    "key": "nameShortened_unique",
-                    "type": "unique",
-                    "status": "available",
-                    "attributes": [
-                        "nameShortened"
-                    ],
-                    "orders": [
-                        "ASC"
-                    ]
-                }
-            ]
+            "indexes": []
         },
         {
             "$id": "tournaments",
@@ -132,14 +88,6 @@
             "enabled": true,
             "documentSecurity": false,
             "attributes": [
-                {
-                    "key": "tournamentId",
-                    "type": "string",
-                    "required": true,
-                    "array": false,
-                    "size": 16,
-                    "default": null
-                },
                 {
                     "key": "name",
                     "type": "string",
@@ -208,17 +156,6 @@
             ],
             "indexes": [
                 {
-                    "key": "tournamentId_unique",
-                    "type": "unique",
-                    "status": "available",
-                    "attributes": [
-                        "tournamentId"
-                    ],
-                    "orders": [
-                        "ASC"
-                    ]
-                },
-                {
                     "key": "parentId_index",
                     "type": "key",
                     "status": "available",
@@ -230,6 +167,80 @@
                     ]
                 }
             ]
+        },
+        {
+            "$id": "teams",
+            "$permissions": [],
+            "databaseId": "betengine",
+            "name": "Teams",
+            "enabled": true,
+            "documentSecurity": false,
+            "attributes": [
+                {
+                    "key": "name",
+                    "type": "string",
+                    "required": true,
+                    "array": false,
+                    "size": 32,
+                    "default": null
+                },
+                {
+                    "key": "colorPrimary",
+                    "type": "string",
+                    "required": false,
+                    "array": false,
+                    "size": 8,
+                    "default": null
+                },
+                {
+                    "key": "colorSecondary",
+                    "type": "string",
+                    "required": false,
+                    "array": false,
+                    "size": 8,
+                    "default": null
+                },
+                {
+                    "key": "logoUrl",
+                    "type": "string",
+                    "required": false,
+                    "array": false,
+                    "size": 256,
+                    "default": null
+                }
+            ],
+            "indexes": []
+        },
+        {
+            "$id": "series",
+            "$permissions": [],
+            "databaseId": "betengine",
+            "name": "series",
+            "enabled": true,
+            "documentSecurity": false,
+            "attributes": [],
+            "indexes": []
+        }
+    ],
+    "functions": [
+        {
+            "$id": "get_scheduled_cs2_matches",
+            "execute": [
+                "any"
+            ],
+            "name": "Get Scheduled CS2 Matches",
+            "enabled": true,
+            "logging": true,
+            "runtime": "bun-1.1",
+            "scopes": [
+                "users.read"
+            ],
+            "events": [],
+            "schedule": "",
+            "timeout": 15,
+            "entrypoint": "src/main.ts",
+            "commands": "bun install",
+            "path": "functions/Get Scheduled CS2 Matches"
         }
     ]
 }

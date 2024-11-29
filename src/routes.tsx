@@ -49,17 +49,17 @@ export const authRoutes: Routes = {
 
 export const routes: Routes = {
   home: {
-    id: 'Home',
+    id: 'Matches',
     path: '/',
     element: <HomePage />,
-    icon: <HomeIcon />
-  },
-  matches: {
-    id: 'Matches',
-    path: '/matches',
-    element: <MatchesPage />,
     icon: <MatchesIcon />
   },
+  // matches: {
+  //   id: 'Matches',
+  //   path: '/matches',
+  //   element: <MatchesPage />,
+  //   icon: <MatchesIcon />
+  // },
   match: {
     id: 'Match',
     path: '/matches/:id',
@@ -97,9 +97,7 @@ export const routes: Routes = {
 };
 
 export const navItems = Object.values(routes).filter((item) =>
-  ['Home', 'Matches', 'Tournaments', 'Leaderboards', 'Rewards'].includes(
-    item.id
-  )
+  ['Matches', 'Tournaments', 'Leaderboards', 'Rewards'].includes(item.id)
 );
 
 export const router = createBrowserRouter(

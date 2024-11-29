@@ -36,5 +36,200 @@
                 "mockNumbers": []
             }
         }
-    }
+    },
+    "databases": [
+        {
+            "$id": "betengine",
+            "name": "betengine",
+            "enabled": true
+        }
+    ],
+    "collections": [
+        {
+            "$id": "games",
+            "$permissions": [
+                "read(\"any\")"
+            ],
+            "databaseId": "betengine",
+            "name": "Games",
+            "enabled": true,
+            "documentSecurity": false,
+            "attributes": [
+                {
+                    "key": "titleId",
+                    "type": "string",
+                    "required": true,
+                    "array": false,
+                    "size": 6,
+                    "default": null
+                },
+                {
+                    "key": "name",
+                    "type": "string",
+                    "required": true,
+                    "array": false,
+                    "size": 64,
+                    "default": null
+                },
+                {
+                    "key": "nameShortened",
+                    "type": "string",
+                    "required": true,
+                    "array": false,
+                    "size": 32,
+                    "default": null
+                },
+                {
+                    "key": "logoId",
+                    "type": "string",
+                    "required": true,
+                    "array": false,
+                    "size": 32,
+                    "default": null
+                }
+            ],
+            "indexes": [
+                {
+                    "key": "titleId_unique",
+                    "type": "unique",
+                    "status": "available",
+                    "attributes": [
+                        "titleId"
+                    ],
+                    "orders": [
+                        "ASC"
+                    ]
+                },
+                {
+                    "key": "name_unique",
+                    "type": "unique",
+                    "status": "available",
+                    "attributes": [
+                        "name"
+                    ],
+                    "orders": [
+                        "ASC"
+                    ]
+                },
+                {
+                    "key": "nameShortened_unique",
+                    "type": "unique",
+                    "status": "available",
+                    "attributes": [
+                        "nameShortened"
+                    ],
+                    "orders": [
+                        "ASC"
+                    ]
+                }
+            ]
+        },
+        {
+            "$id": "tournaments",
+            "$permissions": [],
+            "databaseId": "betengine",
+            "name": "Tournaments",
+            "enabled": true,
+            "documentSecurity": false,
+            "attributes": [
+                {
+                    "key": "tournamentId",
+                    "type": "string",
+                    "required": true,
+                    "array": false,
+                    "size": 16,
+                    "default": null
+                },
+                {
+                    "key": "name",
+                    "type": "string",
+                    "required": true,
+                    "array": false,
+                    "size": 64,
+                    "default": null
+                },
+                {
+                    "key": "nameShortened",
+                    "type": "string",
+                    "required": true,
+                    "array": false,
+                    "size": 32,
+                    "default": null
+                },
+                {
+                    "key": "logoUrl",
+                    "type": "string",
+                    "required": false,
+                    "array": false,
+                    "size": 256,
+                    "default": null
+                },
+                {
+                    "key": "startDate",
+                    "type": "datetime",
+                    "required": false,
+                    "array": false,
+                    "format": "",
+                    "default": null
+                },
+                {
+                    "key": "endDate",
+                    "type": "datetime",
+                    "required": false,
+                    "array": false,
+                    "format": "",
+                    "default": null
+                },
+                {
+                    "key": "prizePool",
+                    "type": "double",
+                    "required": false,
+                    "array": false,
+                    "min": -1.7976931348623157e+308,
+                    "max": 1.7976931348623157e+308,
+                    "default": null
+                },
+                {
+                    "key": "parentId",
+                    "type": "string",
+                    "required": false,
+                    "array": false,
+                    "size": 16,
+                    "default": null
+                },
+                {
+                    "key": "children",
+                    "type": "string",
+                    "required": false,
+                    "array": true,
+                    "size": 16,
+                    "default": null
+                }
+            ],
+            "indexes": [
+                {
+                    "key": "tournamentId_unique",
+                    "type": "unique",
+                    "status": "available",
+                    "attributes": [
+                        "tournamentId"
+                    ],
+                    "orders": [
+                        "ASC"
+                    ]
+                },
+                {
+                    "key": "parentId_index",
+                    "type": "key",
+                    "status": "available",
+                    "attributes": [
+                        "parentId"
+                    ],
+                    "orders": [
+                        "ASC"
+                    ]
+                }
+            ]
+        }
+    ]
 }

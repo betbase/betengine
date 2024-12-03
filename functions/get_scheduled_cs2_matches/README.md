@@ -1,6 +1,4 @@
-# ⚡ Bun Starter Function
-
-A simple starter function. Edit `src/main.ts` to get started and create something awesome! 🚀
+# get_scheduled_cs2_matches
 
 ## 🧰 Usage
 

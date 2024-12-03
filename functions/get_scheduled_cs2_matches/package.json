@@ -5,12 +5,20 @@
   "main": "src/main.ts",
   "type": "module",
   "scripts": {
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "generate": "graphql-codegen --config codegen.ts"
   },
   "dependencies": {
+    "@graphql-codegen/cli": "^5.0.3",
+    "@graphql-codegen/typescript": "^4.1.2",
+    "@graphql-codegen/typescript-graphql-request": "^6.2.0",
+    "@graphql-codegen/typescript-operations": "^4.4.0",
+    "graphql": "^16.9.0",
     "node-appwrite": "^9.0.0"
   },
   "devDependencies": {
+    "@graphql-codegen/schema-ast": "^4.1.0",
+    "@types/bun": "^1.1.14",
     "prettier": "^3.0.0"
   }
 }

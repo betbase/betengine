@@ -390,6 +390,28 @@
             "entrypoint": "src/main.ts",
             "commands": "bun install",
             "path": "functions/get_scheduled_cs2_matches"
+        },
+        {
+            "$id": "update_cs2_matches",
+            "name": "update_cs2_matches",
+            "runtime": "bun-1.1",
+            "execute": [
+                "any"
+            ],
+            "events": [],
+            "scopes": [
+                "databases.read",
+                "collections.read",
+                "documents.read",
+                "documents.write"
+            ],
+            "schedule": "",
+            "timeout": 15,
+            "enabled": true,
+            "logging": true,
+            "entrypoint": "src/main.ts",
+            "commands": "bun install",
+            "path": "functions/update_cs2_matches"
         }
     ]
 }

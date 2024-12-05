@@ -59,7 +59,10 @@ export default async ({ req, res, log, error }) => {
         }
 
         // If the serie is deleted in GRID, mark it as cancelled
-        if (response?.errors[0]?.extensions?.errorType) {
+        if (
+          response?.errors &&
+          response?.errors[0]?.extensions?.errorType === 'PERMISSION_DENIED'
+        ) {
           log(
             `The serie ID ${serieId} is deleted in GRID. Serie is now marked as cancelled.`
           );
@@ -78,7 +81,7 @@ export default async ({ req, res, log, error }) => {
 
         return response.data.seriesState;
       } catch (e) {
-        log(
+        error(
           `Could not fetch series state for serie ID ${serieId}: ${e.message}`
         );
         return null;

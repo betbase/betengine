@@ -383,7 +383,7 @@
                 "documents.write"
             ],
             "schedule": "0 */4 * * *",
-            "timeout": 15,
+            "timeout": 60,
             "enabled": true,
             "logging": true,
             "entrypoint": "src/main.ts",
@@ -404,7 +404,7 @@
                 "documents.read",
                 "documents.write"
             ],
-            "schedule": "",
+            "schedule": "* * * * *",
             "timeout": 300,
             "enabled": true,
             "logging": true,

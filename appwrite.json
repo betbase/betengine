@@ -383,7 +383,7 @@
                 "documents.write"
             ],
             "schedule": "0 */4 * * *",
-            "timeout": 60,
+            "timeout": 120,
             "enabled": true,
             "logging": true,
             "entrypoint": "src/main.ts",
@@ -421,10 +421,13 @@
             ],
             "events": [],
             "scopes": [
-                "users.read"
+                "databases.read",
+                "collections.read",
+                "documents.read",
+                "documents.write"
             ],
             "schedule": "",
-            "timeout": 15,
+            "timeout": 60,
             "enabled": true,
             "logging": true,
             "entrypoint": "src/main.ts",

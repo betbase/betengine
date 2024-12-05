@@ -106,6 +106,7 @@ export default async ({ req, res, log, error }) => {
           awayTeamName: serie.teams[1].name,
           awayTeamScore: serie.teams[1].score,
           awayTeamWon: serie.teams[1].won,
+          live: serie.started && !serie.finished && serie.valid,
           cancelled: !serie.valid
         }
       );

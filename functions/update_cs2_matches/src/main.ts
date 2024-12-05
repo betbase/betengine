@@ -22,7 +22,7 @@ export default async ({ req, res, log, error }) => {
       errorPolicy: 'all'
     });
 
-    return client.request<
+    return client.rawRequest<
       GetCs2SeriesStateQuery,
       GetCs2SeriesStateQueryVariables
     >(query, { seriesId });
@@ -51,14 +51,32 @@ export default async ({ req, res, log, error }) => {
   const updatedSeriesFromGrid = await Promise.all(
     seriesNotFinishedIds.map(async (serieId) => {
       try {
-        const serieData = await fetchGraphQL(GET_CS2_SERIES_STATE, serieId);
+        const response = await fetchGraphQL(GET_CS2_SERIES_STATE, serieId);
 
-        if (!serieData?.seriesState?.id) {
+        if (!response?.data.seriesState?.id) {
           log(`No data found for serie ID ${serieId}`);
           return null;
         }
 
-        return serieData;
+        // If the serie is deleted in GRID, mark it as cancelled
+        if (response?.errors[0]?.extensions?.errorType) {
+          log(
+            `The serie ID ${serieId} is deleted in GRID. Serie is now marked as cancelled.`
+          );
+
+          await database.updateDocument(
+            Bun.env['DATABASE_ID'],
+            'series',
+            serieId,
+            {
+              cancelled: true
+            }
+          );
+
+          return null;
+        }
+
+        return response.data.seriesState;
       } catch (e) {
         log(
           `Could not fetch series state for serie ID ${serieId}: ${e.message}`
@@ -74,22 +92,22 @@ export default async ({ req, res, log, error }) => {
       await database.updateDocument(
         Bun.env['DATABASE_ID'],
         'series',
-        serie.seriesState.id,
+        serie.id,
         {
-          startDate: serie.seriesState.startedAt,
-          started: serie.seriesState.started,
-          finished: serie.seriesState.finished,
-          homeTeamName: serie.seriesState.teams[0].name,
-          homeTeamScore: serie.seriesState.teams[0].score,
-          homeTeamWon: serie.seriesState.teams[0].won,
-          awayTeamName: serie.seriesState.teams[1].name,
-          awayTeamScore: serie.seriesState.teams[1].score,
-          awayTeamWon: serie.seriesState.teams[1].won,
-          cancelled: !serie.seriesState.valid
+          startDate: serie.startedAt,
+          started: serie.started,
+          finished: serie.finished,
+          homeTeamName: serie.teams[0].name,
+          homeTeamScore: serie.teams[0].score,
+          homeTeamWon: serie.teams[0].won,
+          awayTeamName: serie.teams[1].name,
+          awayTeamScore: serie.teams[1].score,
+          awayTeamWon: serie.teams[1].won,
+          cancelled: !serie.valid
         }
       );
 
-      log(`Document for serie ID ${serie.seriesState.id} updated`);
+      log(`Document for serie ID ${serie.id} updated`);
     } catch (err) {
       error(`Could not update document: ` + err.message);
     }

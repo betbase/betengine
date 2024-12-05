@@ -146,7 +146,9 @@ export default async ({ req, res, log, error }) => {
         log(`Document for tournament ID ${tournamentId} updated`);
       }
     } catch (e: any) {
-      error('Could not create or update document: ' + e.message);
+      error(
+        `Could not create or update tournament ID ${tournamentId}: ${e.message}`
+      );
     }
   }
 
@@ -188,8 +190,8 @@ export default async ({ req, res, log, error }) => {
 
         log(`Document for serie ID ${serie.id} updated`);
       }
-    } catch (err) {
-      error('Could not create or update document: ' + err.message);
+    } catch (e) {
+      error(`Could not create or update serie ID ${serie.id}: ${e.message}`);
     }
   }
 

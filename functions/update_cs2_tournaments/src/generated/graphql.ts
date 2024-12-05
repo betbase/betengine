@@ -1903,78 +1903,26 @@ export type VideoStream = {
   url: Scalars['String']['output'];
 };
 
-export type GetScheduledCs2SeriesNext2WeeksQueryVariables = Exact<{
-  filter?: InputMaybe<SeriesFilter>;
-  after?: InputMaybe<Scalars['Cursor']['input']>;
-}>;
-
-
-export type GetScheduledCs2SeriesNext2WeeksQuery = { __typename?: 'Query', allSeries: { __typename?: 'SeriesConnection', totalCount: number, pageInfo: { __typename?: 'PageInfo', hasPreviousPage: boolean, hasNextPage: boolean, startCursor?: any | null, endCursor?: any | null }, edges: Array<{ __typename?: 'SeriesEdge', cursor: any, node: { __typename?: 'Series', id: string, startTimeScheduled: any, title: { __typename?: 'Title', name: string, nameShortened: string }, tournament: { __typename?: 'Tournament', name: string, nameShortened: string, id: string, logoUrl: any, endDate?: any | null, startDate?: any | null }, format: { __typename?: 'SeriesFormat', name: string, nameShortened: string }, teams: Array<{ __typename?: 'TeamParticipant', scoreAdvantage: number, baseInfo: { __typename?: 'Team', name: string, logoUrl: any, id: string } }> } }> } };
-
 export type GetCs2TournamentQueryVariables = Exact<{
   tournamentId: Scalars['ID']['input'];
 }>;
 
 
-export type GetCs2TournamentQuery = { __typename?: 'Query', tournament?: { __typename?: 'Tournament', endDate?: any | null, id: string, logoUrl: any, name: string, nameShortened: string, startDate?: any | null, prizePool?: { __typename?: 'Money', amount: any } | null } | null };
+export type GetCs2TournamentQuery = { __typename?: 'Query', tournament?: { __typename?: 'Tournament', id: string, endDate?: any | null, startDate?: any | null, name: string, nameShortened: string, logoUrl: any, prizePool?: { __typename?: 'Money', amount: any } | null } | null };
 
 
-export const GetScheduledCs2SeriesNext2WeeksDocument = gql`
-    query GetScheduledCS2SeriesNext2Weeks($filter: SeriesFilter, $after: Cursor) {
-  allSeries(filter: $filter, orderBy: StartTimeScheduled, after: $after) {
-    totalCount
-    pageInfo {
-      hasPreviousPage
-      hasNextPage
-      startCursor
-      endCursor
-    }
-    edges {
-      cursor
-      node {
-        id
-        title {
-          name
-          nameShortened
-        }
-        tournament {
-          name
-          nameShortened
-          id
-          logoUrl
-          endDate
-          startDate
-        }
-        startTimeScheduled
-        format {
-          name
-          nameShortened
-        }
-        teams {
-          baseInfo {
-            name
-            logoUrl
-            id
-          }
-          scoreAdvantage
-        }
-      }
-    }
-  }
-}
-    `;
 export const GetCs2TournamentDocument = gql`
     query GetCS2Tournament($tournamentId: ID!) {
   tournament(id: $tournamentId) {
-    endDate
     id
-    logoUrl
+    endDate
+    startDate
     name
     nameShortened
+    logoUrl
     prizePool {
       amount
     }
-    startDate
   }
 }
     `;
@@ -1986,9 +1934,6 @@ const defaultWrapper: SdkFunctionWrapper = (action, _operationName, _operationTy
 
 export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = defaultWrapper) {
   return {
-    GetScheduledCS2SeriesNext2Weeks(variables?: GetScheduledCs2SeriesNext2WeeksQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<GetScheduledCs2SeriesNext2WeeksQuery> {
-      return withWrapper((wrappedRequestHeaders) => client.request<GetScheduledCs2SeriesNext2WeeksQuery>(GetScheduledCs2SeriesNext2WeeksDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetScheduledCS2SeriesNext2Weeks', 'query', variables);
-    },
     GetCS2Tournament(variables: GetCs2TournamentQueryVariables, requestHeaders?: GraphQLClientRequestHeaders): Promise<GetCs2TournamentQuery> {
       return withWrapper((wrappedRequestHeaders) => client.request<GetCs2TournamentQuery>(GetCs2TournamentDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetCS2Tournament', 'query', variables);
     }

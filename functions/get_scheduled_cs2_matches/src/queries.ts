@@ -45,3 +45,19 @@ export const GET_SCHEDULED_CS2_SERIES_NEXT_2_WEEKS = gql`
     }
   }
 `;
+
+export const GET_CS2_TOURNAMENT = gql`
+  query GetCS2Tournament($tournamentId: ID!) {
+    tournament(id: $tournamentId) {
+      endDate
+      id
+      logoUrl
+      name
+      nameShortened
+      prizePool {
+        amount
+      }
+      startDate
+    }
+  }
+`;

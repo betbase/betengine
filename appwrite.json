@@ -411,6 +411,25 @@
             "entrypoint": "src/main.ts",
             "commands": "bun install",
             "path": "functions/update_cs2_matches"
+        },
+        {
+            "$id": "update_cs2_tournaments",
+            "name": "update_cs2_tournaments",
+            "runtime": "bun-1.1",
+            "execute": [
+                "any"
+            ],
+            "events": [],
+            "scopes": [
+                "users.read"
+            ],
+            "schedule": "",
+            "timeout": 15,
+            "enabled": true,
+            "logging": true,
+            "entrypoint": "src/main.ts",
+            "commands": "bun install",
+            "path": "functions/update_cs2_tournaments"
         }
     ]
 }

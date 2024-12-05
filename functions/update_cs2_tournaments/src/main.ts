@@ -29,7 +29,7 @@ export default async ({ req, res, log, error }) => {
   };
 
   const tournaments = await database.listDocuments(
-    Bun.env['APPWRITE_FUNCTION_DATABASE_ID'],
+    Bun.env['DATABASE_ID'],
     'tournaments',
     [Query.greaterThanEqual('endDate', new Date().toISOString())]
   );

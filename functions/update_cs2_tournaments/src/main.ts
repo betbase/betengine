@@ -34,6 +34,8 @@ export default async ({ req, res, log, error }) => {
     [Query.greaterThanEqual('endDate', new Date().toISOString())]
   );
 
+  log(`Found ${tournaments.documents.length} tournaments`);
+
   for (const tournament of tournaments.documents) {
     const tournamentId = tournament.$id;
     const { data, errors } = await fetchGraphQL(

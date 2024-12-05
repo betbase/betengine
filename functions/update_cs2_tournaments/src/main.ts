@@ -53,7 +53,7 @@ export default async ({ req, res, log, error }) => {
 
     try {
       await database.updateDocument(
-        Bun.env['APPWRITE_FUNCTION_DATABASE_ID'],
+        Bun.env['DATABASE_ID'],
         'tournaments',
         tournament.$id,
         {

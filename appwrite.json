@@ -272,14 +272,6 @@
                     "default": null
                 },
                 {
-                    "key": "endDate",
-                    "type": "datetime",
-                    "required": false,
-                    "array": false,
-                    "format": "",
-                    "default": null
-                },
-                {
                     "key": "homeTeamId",
                     "type": "string",
                     "required": true,
@@ -363,6 +355,13 @@
                     "required": false,
                     "array": false,
                     "default": false
+                },
+                {
+                    "key": "cancelled",
+                    "type": "boolean",
+                    "required": false,
+                    "array": false,
+                    "default": false
                 }
             ],
             "indexes": []
@@ -383,7 +382,7 @@
                 "documents.read",
                 "documents.write"
             ],
-            "schedule": "",
+            "schedule": "0 */4 * * *",
             "timeout": 15,
             "enabled": true,
             "logging": true,
@@ -406,7 +405,7 @@
                 "documents.write"
             ],
             "schedule": "",
-            "timeout": 15,
+            "timeout": 300,
             "enabled": true,
             "logging": true,
             "entrypoint": "src/main.ts",

@@ -18,7 +18,8 @@ export default async ({ req, res, log, error }) => {
       headers: {
         'Content-Type': 'application/json',
         'x-api-key': Bun.env['GRID_API_KEY']
-      }
+      },
+      errorPolicy: 'all'
     });
 
     return client.request<
@@ -32,8 +33,9 @@ export default async ({ req, res, log, error }) => {
     Bun.env['DATABASE_ID'],
     'series',
     [
-      Query.greaterThanEqual('startTimeScheduled', new Date().toISOString()),
-      Query.notEqual('finished', true),
+      Query.lessThanEqual('startTimeScheduled', new Date().toISOString()),
+      Query.equal('finished', false),
+      Query.equal('cancelled', false),
       Query.limit(500)
     ]
   );
@@ -47,13 +49,27 @@ export default async ({ req, res, log, error }) => {
   );
 
   const updatedSeriesFromGrid = await Promise.all(
-    seriesNotFinishedIds.map(
-      async (serieId) => await fetchGraphQL(GET_CS2_SERIES_STATE, serieId)
-    )
+    seriesNotFinishedIds.map(async (serieId) => {
+      try {
+        const serieData = await fetchGraphQL(GET_CS2_SERIES_STATE, serieId);
+
+        if (!serieData?.seriesState?.id) {
+          log(`No data found for serie ID ${serieId}`);
+          return null;
+        }
+
+        return serieData;
+      } catch (e) {
+        log(
+          `Could not fetch series state for serie ID ${serieId}: ${e.message}`
+        );
+        return null;
+      }
+    })
   );
 
   // Update series in database
-  for (const serie of updatedSeriesFromGrid) {
+  for (const serie of updatedSeriesFromGrid.filter((v) => v !== null)) {
     try {
       await database.updateDocument(
         Bun.env['DATABASE_ID'],
@@ -68,7 +84,8 @@ export default async ({ req, res, log, error }) => {
           homeTeamWon: serie.seriesState.teams[0].won,
           awayTeamName: serie.seriesState.teams[1].name,
           awayTeamScore: serie.seriesState.teams[1].score,
-          awayTeamWon: serie.seriesState.teams[1].won
+          awayTeamWon: serie.seriesState.teams[1].won,
+          cancelled: !serie.seriesState.valid
         }
       );
 
@@ -79,7 +96,6 @@ export default async ({ req, res, log, error }) => {
   }
 
   return res.json({
-    message:
-      'Successfully fetched and updated series next 2 weeks of CS2 series'
+    message: 'Successfully fetched and updated series states'
   });
 };

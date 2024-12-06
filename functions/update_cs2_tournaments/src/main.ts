@@ -46,7 +46,7 @@ export default async ({ req, res, log, error }) => {
       tournamentId
     );
 
-    if (errors[0]) {
+    if (errors) {
       error(`Failed to fetch tournament ${tournamentId}: ${errors[0].message}`);
       continue;
     }

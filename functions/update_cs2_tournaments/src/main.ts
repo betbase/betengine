@@ -70,6 +70,8 @@ export default async ({ req, res, log, error }) => {
           prizePool: data.tournament.prizePool.amount
         }
       );
+
+      log(`Updated tournament ID ${tournamentId}`);
     } catch (e: any) {
       error(`Failed to update tournament ${tournamentId}: ${e.message}`);
     }

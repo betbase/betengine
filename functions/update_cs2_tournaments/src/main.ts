@@ -31,7 +31,10 @@ export default async ({ req, res, log, error }) => {
   const tournaments = await database.listDocuments(
     Bun.env['DATABASE_ID'],
     'tournaments',
-    [Query.greaterThanEqual('endDate', new Date().toISOString())]
+    [
+      // Query.greaterThanEqual('endDate', new Date().toISOString()),
+      Query.limit(100)
+    ]
   );
 
   log(`Found ${tournaments.documents.length} tournaments`);

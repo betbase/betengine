@@ -101,7 +101,7 @@
                     "type": "string",
                     "required": true,
                     "array": false,
-                    "size": 32,
+                    "size": 64,
                     "default": null
                 },
                 {
@@ -130,43 +130,15 @@
                 },
                 {
                     "key": "prizePool",
-                    "type": "double",
+                    "type": "integer",
                     "required": false,
                     "array": false,
-                    "min": -1.7976931348623157e+308,
-                    "max": 1.7976931348623157e+308,
-                    "default": null
-                },
-                {
-                    "key": "parentId",
-                    "type": "string",
-                    "required": false,
-                    "array": false,
-                    "size": 16,
-                    "default": null
-                },
-                {
-                    "key": "children",
-                    "type": "string",
-                    "required": false,
-                    "array": true,
-                    "size": 16,
+                    "min": -9223372036854775808,
+                    "max": 9223372036854775807,
                     "default": null
                 }
             ],
-            "indexes": [
-                {
-                    "key": "parentId_index",
-                    "type": "key",
-                    "status": "available",
-                    "attributes": [
-                        "parentId"
-                    ],
-                    "orders": [
-                        "ASC"
-                    ]
-                }
-            ]
+            "indexes": []
         },
         {
             "$id": "teams",
@@ -362,6 +334,56 @@
                     "required": false,
                     "array": false,
                     "default": false
+                },
+                {
+                    "key": "tournamentId",
+                    "type": "relationship",
+                    "required": false,
+                    "array": false,
+                    "relatedCollection": "tournaments",
+                    "relationType": "manyToOne",
+                    "twoWay": false,
+                    "twoWayKey": "67523bda000ea1679db5",
+                    "onDelete": "cascade",
+                    "side": "parent"
+                }
+            ],
+            "indexes": []
+        },
+        {
+            "$id": "users",
+            "$permissions": [],
+            "databaseId": "betengine",
+            "name": "Users",
+            "enabled": true,
+            "documentSecurity": false,
+            "attributes": [
+                {
+                    "key": "currency",
+                    "type": "integer",
+                    "required": false,
+                    "array": false,
+                    "min": 0,
+                    "max": 9223372036854775807,
+                    "default": 0
+                },
+                {
+                    "key": "correctPredictions",
+                    "type": "integer",
+                    "required": false,
+                    "array": false,
+                    "min": 0,
+                    "max": 9223372036854775807,
+                    "default": 0
+                },
+                {
+                    "key": "wrongPredictions",
+                    "type": "integer",
+                    "required": false,
+                    "array": false,
+                    "min": 0,
+                    "max": 9223372036854775807,
+                    "default": 0
                 }
             ],
             "indexes": []

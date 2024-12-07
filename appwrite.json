@@ -387,7 +387,7 @@
             "enabled": true,
             "logging": true,
             "entrypoint": "src/main.ts",
-            "commands": "bun install",
+            "commands": "bun install --production --frozen-lockfile",
             "path": "functions/get_scheduled_cs2_matches"
         },
         {
@@ -431,7 +431,7 @@
             "enabled": true,
             "logging": true,
             "entrypoint": "src/main.ts",
-            "commands": "bun install",
+            "commands": "bun install --production --frozen-lockfile",
             "path": "functions/update_cs2_tournaments"
         }
     ]

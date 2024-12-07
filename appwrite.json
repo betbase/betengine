@@ -426,7 +426,7 @@
                 "documents.read",
                 "documents.write"
             ],
-            "schedule": "",
+            "schedule": "0 */6 * * *",
             "timeout": 60,
             "enabled": true,
             "logging": true,

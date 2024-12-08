@@ -384,6 +384,13 @@
                     "min": 0,
                     "max": 9223372036854775807,
                     "default": 0
+                },
+                {
+                    "key": "signupBonusClaimed",
+                    "type": "boolean",
+                    "required": false,
+                    "array": false,
+                    "default": false
                 }
             ],
             "indexes": []
@@ -455,6 +462,27 @@
             "entrypoint": "src/main.ts",
             "commands": "bun install --production --frozen-lockfile",
             "path": "functions/update_cs2_tournaments"
+        },
+        {
+            "$id": "create_user_in_db",
+            "name": "create_user_in_db",
+            "runtime": "bun-1.1",
+            "execute": [
+                "any"
+            ],
+            "events": [],
+            "scopes": [
+                "users.read",
+                "documents.read",
+                "documents.write"
+            ],
+            "schedule": "",
+            "timeout": 15,
+            "enabled": true,
+            "logging": true,
+            "entrypoint": "src/main.ts",
+            "commands": "bun install --production --frozen-lockfile",,
+            "path": "functions/create_user_in_db"
         }
     ]
 }

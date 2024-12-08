@@ -416,7 +416,7 @@
             "enabled": true,
             "logging": true,
             "entrypoint": "src/main.ts",
-            "commands": "bun install --production --frozen-lockfile",
+            "commands": "bun install --production",
             "path": "functions/get_scheduled_cs2_matches"
         },
         {
@@ -481,7 +481,7 @@
             "enabled": true,
             "logging": true,
             "entrypoint": "src/main.ts",
-            "commands": "bun install --production --frozen-lockfile",,
+            "commands": "bun install --production --frozen-lockfile",
             "path": "functions/create_user_in_db"
         }
     ]

@@ -44,36 +44,10 @@ export default async ({ req, res, log, error }) => {
     `Found ${seriesNotFinished.documents.length} series not finished but have start time scheduled in the past`
   );
 
-  const seriesNotFinishedIds = seriesNotFinished.documents.map(
-    (serie) => serie.$id
-  );
-
   const updatedSeriesFromGrid = await Promise.all(
-    seriesNotFinishedIds.map(async (serieId) => {
+    seriesNotFinished.documents.map(async (serie) => {
       try {
-        const response = await fetchGraphQL(GET_CS2_SERIES_STATE, serieId);
-
-        if (response?.data?.seriesState === null) {
-          log(
-            `The serie ID ${serieId} is deleted in GRID. Serie is now marked as cancelled.`
-          );
-
-          await database.updateDocument(
-            Bun.env['DATABASE_ID'],
-            'series',
-            serieId,
-            {
-              cancelled: true
-            }
-          );
-
-          return null;
-        }
-
-        if (!response?.data.seriesState?.id) {
-          log(`No data found for serie ID ${serieId}`);
-          return null;
-        }
+        const response = await fetchGraphQL(GET_CS2_SERIES_STATE, serie.$id);
 
         // If the serie is deleted in GRID, mark it as cancelled
         if (
@@ -81,13 +55,13 @@ export default async ({ req, res, log, error }) => {
           response?.errors[0]?.extensions?.errorType === 'PERMISSION_DENIED'
         ) {
           log(
-            `The serie ID ${serieId} is deleted in GRID. Serie is now marked as cancelled.`
+            `The serie ID ${serie.$id} is deleted in GRID. Serie is now marked as cancelled.`
           );
 
           await database.updateDocument(
             Bun.env['DATABASE_ID'],
             'series',
-            serieId,
+            serie.$id,
             {
               cancelled: true
             }
@@ -96,10 +70,34 @@ export default async ({ req, res, log, error }) => {
           return null;
         }
 
+        // If the serie is deleted in GRID, mark it as cancelled
+        if (response?.data?.seriesState === null) {
+          log(
+            `The serie ID ${serie.$id} is deleted in GRID. Serie is now marked as cancelled.`
+          );
+
+          await database.updateDocument(
+            Bun.env['DATABASE_ID'],
+            'series',
+            serie.$id,
+            {
+              cancelled: true
+            }
+          );
+
+          return null;
+        }
+
+        // If no data found for serie ID, log and return null
+        if (!response?.data.seriesState?.id) {
+          log(`No data found for serie ID ${serie.$id}`);
+          return null;
+        }
+
         return response.data.seriesState;
       } catch (e) {
         error(
-          `Could not fetch series state for serie ID ${serieId}: ${e.message}`
+          `Could not fetch series state for serie ID ${serie.$id}: ${e.message}`
         );
         return null;
       }

@@ -47,9 +47,11 @@
     "collections": [
         {
             "$id": "games",
-            "$permissions": [],
+            "$permissions": [
+                "read(\"any\")"
+            ],
             "databaseId": "betengine",
-            "name": "games",
+            "name": "Games",
             "enabled": true,
             "documentSecurity": false,
             "attributes": [
@@ -82,7 +84,9 @@
         },
         {
             "$id": "tournaments",
-            "$permissions": [],
+            "$permissions": [
+                "read(\"any\")"
+            ],
             "databaseId": "betengine",
             "name": "Tournaments",
             "enabled": true,
@@ -153,7 +157,7 @@
                     "type": "string",
                     "required": true,
                     "array": false,
-                    "size": 32,
+                    "size": 64,
                     "default": null
                 },
                 {
@@ -185,14 +189,16 @@
         },
         {
             "$id": "series",
-            "$permissions": [],
+            "$permissions": [
+                "read(\"any\")"
+            ],
             "databaseId": "betengine",
-            "name": "series",
+            "name": "Series",
             "enabled": true,
             "documentSecurity": false,
             "attributes": [
                 {
-                    "key": "gameId",
+                    "key": "game",
                     "type": "relationship",
                     "required": false,
                     "array": false,
@@ -336,7 +342,7 @@
                     "default": false
                 },
                 {
-                    "key": "tournamentId",
+                    "key": "tournament",
                     "type": "relationship",
                     "required": false,
                     "array": false,
@@ -345,6 +351,30 @@
                     "twoWay": false,
                     "twoWayKey": "67523bda000ea1679db5",
                     "onDelete": "cascade",
+                    "side": "parent"
+                },
+                {
+                    "key": "homeTeam",
+                    "type": "relationship",
+                    "required": false,
+                    "array": false,
+                    "relatedCollection": "teams",
+                    "relationType": "manyToOne",
+                    "twoWay": false,
+                    "twoWayKey": "6756c04b001496d537a1",
+                    "onDelete": "setNull",
+                    "side": "parent"
+                },
+                {
+                    "key": "awayTeam",
+                    "type": "relationship",
+                    "required": false,
+                    "array": false,
+                    "relatedCollection": "teams",
+                    "relationType": "manyToOne",
+                    "twoWay": false,
+                    "twoWayKey": "6756c06f001b04e7e1b1",
+                    "onDelete": "setNull",
                     "side": "parent"
                 }
             ],
@@ -416,7 +446,7 @@
             "enabled": true,
             "logging": true,
             "entrypoint": "src/main.ts",
-            "commands": "bun install --production",
+            "commands": "bun install --production --frozen-lockfile",
             "path": "functions/get_scheduled_cs2_matches"
         },
         {

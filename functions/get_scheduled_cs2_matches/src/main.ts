@@ -2,14 +2,9 @@ import { Client, Databases, Query } from 'node-appwrite';
 import { GraphQLClient } from 'graphql-request';
 import {
   GetScheduledCs2SeriesNext2WeeksQueryVariables,
-  GetScheduledCs2SeriesNext2WeeksQuery,
-  GetCs2TournamentQuery,
-  GetCs2TournamentQueryVariables
+  GetScheduledCs2SeriesNext2WeeksQuery
 } from './generated/graphql';
-import {
-  GET_SCHEDULED_CS2_SERIES_NEXT_2_WEEKS,
-  GET_CS2_TOURNAMENT
-} from './queries';
+import { GET_SCHEDULED_CS2_SERIES_NEXT_2_WEEKS } from './queries';
 
 export default async ({ req, res, log, error }) => {
   const appwriteClient = new Client()
@@ -38,20 +33,6 @@ export default async ({ req, res, log, error }) => {
       GetScheduledCs2SeriesNext2WeeksQuery,
       GetScheduledCs2SeriesNext2WeeksQueryVariables
     >(query, variables);
-  };
-
-  const getTournament = async (query: string, tournamentId: string) => {
-    const client = new GraphQLClient(Bun.env['GRID_CD_API_URL'], {
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': Bun.env['GRID_API_KEY']
-      }
-    });
-
-    return client.rawRequest<
-      GetCs2TournamentQuery,
-      GetCs2TournamentQueryVariables
-    >(query, { tournamentId });
   };
 
   const seriesVariables: GetScheduledCs2SeriesNext2WeeksQueryVariables = {
@@ -87,9 +68,10 @@ export default async ({ req, res, log, error }) => {
     endCursor = result.data.allSeries.pageInfo.endCursor;
   }
 
-  const tournamentIds = Array.from(
-    new Set(series.map((serie) => serie.tournament.id))
-  );
+  const tournamentIds = new Set<string>();
+  const tournaments = series
+    .map((serie) => serie.tournament)
+    .filter((tournament) => !tournamentIds.has(tournament.id) && tournamentIds.add(tournament.id));
 
   const seriesDocuments = await database.listDocuments(
     Bun.env['DATABASE_ID'],
@@ -103,52 +85,56 @@ export default async ({ req, res, log, error }) => {
     ]
   );
 
-  for (const tournamentId of tournamentIds) {
-    let tournamentDocument;
-    try {
-      tournamentDocument = await database.getDocument(
-        Bun.env['DATABASE_ID'],
-        'tournaments',
-        tournamentId
-      );
-    } catch {
-      log(`Document for tournament ID ${tournamentId} not found`);
-    }
+  const tournamentsDocuments = await database.listDocuments(
+    Bun.env['DATABASE_ID'],
+    'tournaments',
+    [Query.equal('$id', Array.from(tournamentIds)), Query.limit(500)]
+  );
 
-    try {
-      const tournament = await getTournament(GET_CS2_TOURNAMENT, tournamentId);
-      const tournamentObj = {
-        name: tournament.data.tournament.name,
-        nameShortened: tournament.data.tournament.nameShortened,
-        logoUrl: tournament.data.tournament.logoUrl,
-        startDate: tournament.data.tournament.startDate,
-        endDate: tournament.data.tournament.endDate,
-        prizePool: tournament.data.tournament.prizePool.amount
-      };
+  for (const tournament of tournaments) {
+    const tournamentDocument = tournamentsDocuments.documents.find(
+      (document) => document.$id === tournament.id
+    );
 
-      if (!tournamentDocument) {
+    const tournamentObj = {
+      name: tournament.name,
+      nameShortened: tournament.nameShortened,
+      logoUrl: tournament.logoUrl,
+      startDate: tournament.startDate,
+      endDate: tournament.endDate,
+      prizePool: tournament.prizePool.amount
+    };
+
+    if (!tournamentDocument) {
+      try {
         await database.createDocument(
           Bun.env['DATABASE_ID'],
           'tournaments',
-          tournamentId,
+          tournament.id,
           tournamentObj
         );
 
-        log(`Document for tournament ID ${tournamentId} created`);
-      } else {
+        log(`Document for tournament ID ${tournament.id} created`);
+      } catch (e) {
+        error(
+          `Could not create document for tournament ID ${tournament.id}: ${e.message}`
+        );
+      }
+    } else {
+      try {
         await database.updateDocument(
           Bun.env['DATABASE_ID'],
           'tournaments',
-          tournamentId,
+          tournament.id,
           tournamentObj
         );
 
-        log(`Document for tournament ID ${tournamentId} updated`);
+        log(`Document for tournament ID ${tournament.id} updated`);
+      } catch (e) {
+        error(
+          `Could not update document for tournament ID ${tournament.id}: ${e.message}`
+        );
       }
-    } catch (e: any) {
-      error(
-        `Could not create or update tournament ID ${tournamentId}: ${e.message}`
-      );
     }
   }
 
@@ -159,7 +145,7 @@ export default async ({ req, res, log, error }) => {
 
     try {
       const serieDocument = {
-        gameId: '28',
+        game: '28',
         startTimeScheduled: serie.startTimeScheduled,
         format: serie.format.name,
         homeTeamId: serie.teams[0].baseInfo.id,
@@ -168,7 +154,7 @@ export default async ({ req, res, log, error }) => {
         awayTeamId: serie.teams[1].baseInfo.id,
         awayTeamName: serie.teams[1].baseInfo.name,
         awayTeamScore: document?.awayTeamScore || 0,
-        tournamentId: serie.tournament.id
+        tournament: serie.tournament.id
       };
 
       if (!document) {

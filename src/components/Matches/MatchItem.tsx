@@ -15,7 +15,7 @@ import { Link } from 'react-router-dom';
 import StarOutlineIcon from '@mui/icons-material/StarOutline';
 import { DiamondSharp } from '@mui/icons-material';
 
-export const MatchItem = () => {
+export const MatchItem = ({ match }) => {
   const theme = useTheme();
 
   return (
@@ -43,11 +43,11 @@ export const MatchItem = () => {
                   color: theme.palette.primary.main
                 }
               }}>
-              2022 QH Sports Dota 2 Series 3
+              {match.tournament.nameShortened}
             </Typography>
           </Link>
           <Typography variant="body2" display={TournamentGridMediaQueries}>
-            Jan 11, 04:05 AM
+            {new Date(match.startTimeScheduled).toLocaleString()}
           </Typography>
         </Box>
 

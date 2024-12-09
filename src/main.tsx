@@ -16,7 +16,7 @@ createRoot(document.getElementById('root')!).render(
           router={router}
           future={{
             v7_startTransition: true
-          }}></RouterProvider>
+          }}/>
       </ThemeProvider>
     </AuthProvider>
   </StrictMode>

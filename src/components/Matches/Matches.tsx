@@ -3,10 +3,11 @@ import { Box } from '@mui/material';
 import { MatchesFilter } from '@/components/Matches/MatchesFilter';
 import { database } from '@/appwrite';
 import { useEffect, useState } from 'react';
-import { Models, Query } from 'appwrite';
+import { Query } from 'appwrite';
+import { SerieModel } from '@/models/SerieModel';
 
 export const Matches = () => {
-  const [matches, setMatches] = useState<Models.Document[]>([]);
+  const [matches, setMatches] = useState<SerieModel[]>([]);
 
   useEffect(() => {
     const getMatches = async () => {
@@ -21,7 +22,7 @@ export const Matches = () => {
       );
 
       console.log(response.documents);
-      setMatches(response.documents)
+      setMatches(response.documents as SerieModel[]);
     };
 
     getMatches();

@@ -18,11 +18,17 @@ import {
   HelpOutline
 } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
-import { authRoutes } from '@/routes';
+import { authRoutes, routes } from '@/routes';
 import { VoteslipItem } from '@/components/Voteslip/VoteslipItem';
+import { useVoteslip } from '@/utils/VoteslipContext';
+import { useAuth } from '@/utils/AuthContext';
+import { useState } from 'react';
 
 export const Voteslip = () => {
   const theme = useTheme();
+  const { user } = useAuth();
+  const { predictions, totalStake } = useVoteslip();
+
   return (
     <VoteslipContainer>
       <VoteslipHeader>
@@ -38,7 +44,7 @@ export const Voteslip = () => {
             <Typography variant="h6" fontWeight={600}>
               Voteslip
             </Typography>
-            <VoteslipHeading variant="body1">1</VoteslipHeading>
+            <VoteslipHeading variant="body1">{predictions.length}</VoteslipHeading>
           </Box>
         </VoteslipHeadingContainer>
 
@@ -53,21 +59,34 @@ export const Voteslip = () => {
       </VoteslipHeader>
 
       <VoteslipPredictionsContainer>
-        {/* No predictions */}
-        {/*<VoteslipNoPredictionsContainer>*/}
-        {/*  <Typography variant="h6">No predictions added</Typography>*/}
-        {/*  <Typography variant="body1">*/}
-        {/*    To place a prediction,{' '}*/}
-        {/*    <Link to={authRoutes.signup.path}>sign up</Link> or{' '}*/}
-        {/*    <Link to={authRoutes.login.path}>log in</Link>, and click on any*/}
-        {/*    prediction.*/}
-        {/*  </Typography>*/}
-        {/*</VoteslipNoPredictionsContainer>*/}
+        {predictions.length === 0 && (
+          <VoteslipNoPredictionsContainer>
+            <Typography variant="h6">No predictions added</Typography>
+            {!user?.$id && (
+              <Typography variant="body1">
+                To place a prediction,{' '}
+                <Link to={authRoutes.signup.path}>sign up</Link> or{' '}
+                <Link to={authRoutes.login.path}>log in</Link>, and click on any
+                prediction.
+              </Typography>
+            )}
+            {user?.$id && (
+              <Typography variant="body1">
+                Go to <strong><Link to={routes.home.path}>Matches</Link></strong> and click{' '}
+                <strong>Vote</strong> to add prediction.
+              </Typography>
+            )}
+          </VoteslipNoPredictionsContainer>
+        )}
 
-        <VoteslipItem />
-        <VoteslipItem />
+        {predictions.map((prediction, index) => (
+          <VoteslipItem
+            key={index}
+            prediction={prediction}
+          />
+        ))}
 
-        <Box
+        {predictions.length > 0 && <Box
           sx={{
             display: 'flex',
             flexDirection: 'column',
@@ -100,7 +119,7 @@ export const Voteslip = () => {
                 fontSize: '1rem'
               }}>
               <DiamondSharp />
-              100
+              {totalStake}
             </Typography>
           </Box>
 
@@ -142,7 +161,7 @@ export const Voteslip = () => {
             }}>
             PLACE BETS
           </Button>
-        </Box>
+        </Box>}
       </VoteslipPredictionsContainer>
     </VoteslipContainer>
   );

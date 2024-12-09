@@ -14,9 +14,27 @@ import { ScheduledChip } from '@/components/ui/ScheduledChip';
 import { Link } from 'react-router-dom';
 import StarOutlineIcon from '@mui/icons-material/StarOutline';
 import { DiamondSharp } from '@mui/icons-material';
+import { SerieModel } from '@/models/SerieModel';
+import { MatchPrediction, useVoteslip } from '@/utils/VoteslipContext';
+import { TeamModel } from '@/models/TeamModel';
 
-export const MatchItem = ({ match }) => {
+interface Props {
+  match: SerieModel;
+}
+
+export const MatchItem = ({ match }: Props) => {
   const theme = useTheme();
+  const { addPrediction } = useVoteslip();
+
+  const handleAddPrediction = (proposedWinner: TeamModel) => {
+    const prediction: MatchPrediction = {
+      serie: match,
+      proposedWinner: proposedWinner,
+      stake: 0
+    };
+
+    addPrediction(prediction);
+  };
 
   return (
     <MatchItemWrapper>
@@ -100,7 +118,10 @@ export const MatchItem = ({ match }) => {
                   {match?.homeTeam?.name}
                 </Typography>
               </Link>
-              <Button color="primary" variant="outlined">
+              <Button
+                color="primary"
+                variant="outlined"
+                onClick={() => handleAddPrediction(match.homeTeam)}>
                 Vote{' '}
                 <DiamondSharp
                   sx={{
@@ -113,7 +134,12 @@ export const MatchItem = ({ match }) => {
             <Link
               to={`/teams/${match?.homeTeam?.$id}`}
               style={{ textDecoration: 'none', color: 'inherit' }}>
-              <img src={match?.homeTeam?.logoUrl} alt="Team A" width="40px" height="40px" />
+              <img
+                src={match?.homeTeam?.logoUrl}
+                alt="Team A"
+                width="40px"
+                height="40px"
+              />
             </Link>
           </MatchItemTeamGrid>
           <MatchItemScoreGrid size={2}>
@@ -130,7 +156,12 @@ export const MatchItem = ({ match }) => {
             <Link
               to={`/teams/${match?.awayTeam?.$id}`}
               style={{ textDecoration: 'none', color: 'inherit' }}>
-              <img src={match?.awayTeam?.logoUrl} alt="Team B" width="40x" height="40px"/>
+              <img
+                src={match?.awayTeam?.logoUrl}
+                alt="Team B"
+                width="40x"
+                height="40px"
+              />
             </Link>
             <MatchItemTeamBox>
               <Link
@@ -147,7 +178,10 @@ export const MatchItem = ({ match }) => {
                   {match?.awayTeam?.name}
                 </Typography>
               </Link>
-              <Button color="primary" variant="outlined">
+              <Button
+                color="primary"
+                variant="outlined"
+                onClick={() => handleAddPrediction(match.awayTeam)}>
                 Vote{' '}
                 <DiamondSharp
                   sx={{

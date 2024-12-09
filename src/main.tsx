@@ -6,18 +6,22 @@ import { CssBaseline, ThemeProvider } from '@mui/material';
 import { theme } from '@/themes/default/theme';
 import './index.css';
 import { AuthProvider } from '@/utils/AuthContext';
+import { VoteslipProvider } from '@/utils/VoteslipContext';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <AuthProvider>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <RouterProvider
-          router={router}
-          future={{
-            v7_startTransition: true
-          }}/>
-      </ThemeProvider>
+      <VoteslipProvider>
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          <RouterProvider
+            router={router}
+            future={{
+              v7_startTransition: true
+            }}
+          />
+        </ThemeProvider>
+      </VoteslipProvider>
     </AuthProvider>
   </StrictMode>
 );

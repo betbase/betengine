@@ -8,9 +8,36 @@ import {
   useTheme
 } from '@mui/material';
 import { Add, Close, Remove } from '@mui/icons-material';
+import { MatchPrediction, useVoteslip } from '@/utils/VoteslipContext';
+import { useState } from 'react';
+import { PREDICTION_STAKE_STEP } from '@/config';
 
-export const VoteslipItem = () => {
+interface Props {
+  prediction: MatchPrediction;
+}
+
+export const VoteslipItem = ({ prediction }: Props) => {
   const theme = useTheme();
+  const { updatePrediction, removePrediction } = useVoteslip();
+
+
+  const handleReduceStake = () => {
+    if (prediction.stake >= PREDICTION_STAKE_STEP) {
+      updatePrediction(
+        prediction.serie.$id,
+        prediction.proposedWinner.$id,
+        prediction.stake - PREDICTION_STAKE_STEP
+      );
+    }
+  };
+
+  const handleIncreaseStake = () => {
+    updatePrediction(
+      prediction.serie.$id,
+      prediction.proposedWinner.$id,
+      prediction.stake + PREDICTION_STAKE_STEP
+    );
+  };
 
   return (
     <VoteslipPredictionItemContainer>
@@ -25,6 +52,7 @@ export const VoteslipItem = () => {
           Match Winner
         </Typography>
         <IconButton
+          onClick={() => removePrediction(prediction.serie.$id, prediction.proposedWinner.$id)}
           sx={{
             color: theme.palette.white.main
           }}>
@@ -35,14 +63,14 @@ export const VoteslipItem = () => {
       <VoteslipPredictionItemContents>
         <VoteslipPredictionItemTeamContainer>
           <VoteslipPredictionItemWinnerHeader variant="h6" fontWeight={600}>
-            Fnatic Rising
+            {prediction.proposedWinner.name}
           </VoteslipPredictionItemWinnerHeader>
         </VoteslipPredictionItemTeamContainer>
 
         <VoteslipPredictionItemTeamsGrid container spacing={2}>
           <Grid size={5}>
             <Typography variant="h6" fontWeight={600} fontSize="1rem">
-              Fnatic Rising
+              {prediction.serie.homeTeam.name}
             </Typography>
           </Grid>
 
@@ -60,12 +88,13 @@ export const VoteslipItem = () => {
 
           <Grid size={5}>
             <Typography variant="h6" fontWeight={600} fontSize="1rem">
-              Faze
+              {prediction.serie.awayTeam.name}
             </Typography>
           </Grid>
         </VoteslipPredictionItemTeamsGrid>
         <VoteslipPredictionitemStakeContainer>
           <VoteslipPredictionItemStakeButton
+            onClick={handleReduceStake}
             sx={{
               borderLeft: `1px solid ${theme.palette.white.main}`
             }}>
@@ -80,11 +109,13 @@ export const VoteslipItem = () => {
             label="Stake"
             variant="outlined"
             size="small"
+            value={prediction.stake}
             sx={{
               maxWidth: '6rem'
             }}
           />
           <VoteslipPredictionItemStakeButton
+            onClick={handleIncreaseStake}
             sx={{
               borderRight: `1px solid ${theme.palette.white.main}`
             }}>

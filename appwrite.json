@@ -146,7 +146,9 @@
         },
         {
             "$id": "teams",
-            "$permissions": [],
+            "$permissions": [
+                "read(\"any\")"
+            ],
             "databaseId": "betengine",
             "name": "Teams",
             "enabled": true,
@@ -250,44 +252,12 @@
                     "default": null
                 },
                 {
-                    "key": "homeTeamId",
-                    "type": "string",
-                    "required": true,
-                    "array": false,
-                    "size": 16,
-                    "default": null
-                },
-                {
-                    "key": "homeTeamName",
-                    "type": "string",
-                    "required": true,
-                    "array": false,
-                    "size": 32,
-                    "default": null
-                },
-                {
                     "key": "homeTeamScore",
                     "type": "integer",
                     "required": true,
                     "array": false,
                     "min": 0,
                     "max": 100,
-                    "default": null
-                },
-                {
-                    "key": "awayTeamId",
-                    "type": "string",
-                    "required": true,
-                    "array": false,
-                    "size": 16,
-                    "default": null
-                },
-                {
-                    "key": "awayTeamName",
-                    "type": "string",
-                    "required": true,
-                    "array": false,
-                    "size": 32,
                     "default": null
                 },
                 {
@@ -361,7 +331,7 @@
                     "relatedCollection": "teams",
                     "relationType": "manyToOne",
                     "twoWay": false,
-                    "twoWayKey": "6756c04b001496d537a1",
+                    "twoWayKey": "67575b5c00321df83291",
                     "onDelete": "setNull",
                     "side": "parent"
                 },
@@ -373,7 +343,7 @@
                     "relatedCollection": "teams",
                     "relationType": "manyToOne",
                     "twoWay": false,
-                    "twoWayKey": "6756c06f001b04e7e1b1",
+                    "twoWayKey": "67575b6d001e5c3dca02",
                     "onDelete": "setNull",
                     "side": "parent"
                 }
@@ -441,7 +411,7 @@
                 "documents.read",
                 "documents.write"
             ],
-            "schedule": "0 */4 * * *",
+            "schedule": "0 * * * *",
             "timeout": 120,
             "enabled": true,
             "logging": true,

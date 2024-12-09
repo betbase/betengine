@@ -73,6 +73,19 @@ export default async ({ req, res, log, error }) => {
     .map((serie) => serie.tournament)
     .filter((tournament) => !tournamentIds.has(tournament.id) && tournamentIds.add(tournament.id));
 
+  const teamsIds = new Set<string>();
+  const teams = series
+    .map((serie) => serie.teams)
+    .flat()
+    .map((team) => team.baseInfo)
+    .filter((team) => !teamsIds.has(team.id) && teamsIds.add(team.id));
+
+  const tournamentsDocuments = await database.listDocuments(
+    Bun.env['DATABASE_ID'],
+    'tournaments',
+    [Query.equal('$id', Array.from(tournamentIds)), Query.limit(500)]
+  );
+
   const seriesDocuments = await database.listDocuments(
     Bun.env['DATABASE_ID'],
     'series',
@@ -85,11 +98,52 @@ export default async ({ req, res, log, error }) => {
     ]
   );
 
-  const tournamentsDocuments = await database.listDocuments(
+  const teamsDocuments = await database.listDocuments(
     Bun.env['DATABASE_ID'],
-    'tournaments',
-    [Query.equal('$id', Array.from(tournamentIds)), Query.limit(500)]
+    'teams',
+    [Query.equal('$id', Array.from(teamsIds)), Query.limit(500)]
   );
+
+  for (const team of teams) {
+    const teamDocument = teamsDocuments.documents.find(
+      (document) => document.$id === team.id
+    ) as any;
+
+    const teamObj = {
+      name: team.name,
+      logoUrl: team.logoUrl,
+      colorPrimary: team.colorPrimary,
+      colorSecondary: team.colorSecondary
+    };
+
+    if (!teamDocument) {
+      try {
+        await database.createDocument(
+          Bun.env['DATABASE_ID'],
+          'teams',
+          team.id,
+          teamObj
+        );
+
+        log(`Document for team ID ${team.id} created`);
+      } catch (e) {
+        error(`Could not create document for team ID ${team.id}: ${e.message}`);
+      }
+    } else {
+      try {
+        await database.updateDocument(
+          Bun.env['DATABASE_ID'],
+          'teams',
+          team.id,
+          teamObj
+        );
+
+        log(`Document for team ID ${team.id} updated`);
+      } catch (e) {
+        error(`Could not update document for team ID ${team.id}: ${e.message}`);
+      }
+    }
+  }
 
   for (const tournament of tournaments) {
     const tournamentDocument = tournamentsDocuments.documents.find(
@@ -148,11 +202,9 @@ export default async ({ req, res, log, error }) => {
         game: '28',
         startTimeScheduled: serie.startTimeScheduled,
         format: serie.format.name,
-        homeTeamId: serie.teams[0].baseInfo.id,
-        homeTeamName: serie.teams[0].baseInfo.name,
+        homeTeam: serie.teams[0].baseInfo.id,
         homeTeamScore: document?.homeTeamScore || 0,
-        awayTeamId: serie.teams[1].baseInfo.id,
-        awayTeamName: serie.teams[1].baseInfo.name,
+        awayTeam: serie.teams[1].baseInfo.id,
         awayTeamScore: document?.awayTeamScore || 0,
         tournament: serie.tournament.id
       };

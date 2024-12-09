@@ -1909,7 +1909,7 @@ export type GetScheduledCs2SeriesNext2WeeksQueryVariables = Exact<{
 }>;
 
 
-export type GetScheduledCs2SeriesNext2WeeksQuery = { __typename?: 'Query', allSeries: { __typename?: 'SeriesConnection', totalCount: number, pageInfo: { __typename?: 'PageInfo', hasPreviousPage: boolean, hasNextPage: boolean, startCursor?: any | null, endCursor?: any | null }, edges: Array<{ __typename?: 'SeriesEdge', cursor: any, node: { __typename?: 'Series', id: string, startTimeScheduled: any, title: { __typename?: 'Title', name: string, nameShortened: string }, tournament: { __typename?: 'Tournament', name: string, nameShortened: string, id: string, logoUrl: any, endDate?: any | null, startDate?: any | null, prizePool?: { __typename?: 'Money', amount: any } | null }, format: { __typename?: 'SeriesFormat', name: string, nameShortened: string }, teams: Array<{ __typename?: 'TeamParticipant', scoreAdvantage: number, baseInfo: { __typename?: 'Team', name: string, logoUrl: any, id: string } }> } }> } };
+export type GetScheduledCs2SeriesNext2WeeksQuery = { __typename?: 'Query', allSeries: { __typename?: 'SeriesConnection', totalCount: number, pageInfo: { __typename?: 'PageInfo', hasPreviousPage: boolean, hasNextPage: boolean, startCursor?: any | null, endCursor?: any | null }, edges: Array<{ __typename?: 'SeriesEdge', cursor: any, node: { __typename?: 'Series', id: string, startTimeScheduled: any, title: { __typename?: 'Title', name: string, nameShortened: string }, tournament: { __typename?: 'Tournament', name: string, nameShortened: string, id: string, logoUrl: any, endDate?: any | null, startDate?: any | null, prizePool?: { __typename?: 'Money', amount: any } | null }, teams: Array<{ __typename?: 'TeamParticipant', scoreAdvantage: number, baseInfo: { __typename?: 'Team', id: string, name: string, logoUrl: any, colorPrimary: any, colorSecondary: any } }>, format: { __typename?: 'SeriesFormat', name: string, nameShortened: string } } }> } };
 
 
 export const GetScheduledCs2SeriesNext2WeeksDocument = gql`
@@ -1939,6 +1939,15 @@ export const GetScheduledCs2SeriesNext2WeeksDocument = gql`
           startDate
           prizePool {
             amount
+          }
+        }
+        teams {
+          baseInfo {
+            id
+            name
+            logoUrl
+            colorPrimary
+            colorSecondary
           }
         }
         startTimeScheduled

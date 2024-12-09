@@ -115,12 +115,12 @@ export default async ({ req, res, log, error }) => {
           startDate: serie.startedAt,
           started: serie.started,
           finished: serie.finished,
-          homeTeamName: serie.teams[0].name,
           homeTeamScore: serie.teams[0].score,
           homeTeamWon: serie.teams[0].won,
-          awayTeamName: serie.teams[1].name,
+          homeTeam: serie.teams[0].id,
           awayTeamScore: serie.teams[1].score,
           awayTeamWon: serie.teams[1].won,
+          awayTeam: serie.teams[1].id,
           live: serie.started && !serie.finished && serie.valid,
           cancelled: !serie.valid
         }

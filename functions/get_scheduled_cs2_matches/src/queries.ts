@@ -29,6 +29,15 @@ export const GET_SCHEDULED_CS2_SERIES_NEXT_2_WEEKS = gql`
               amount
             }
           }
+          teams {
+            baseInfo {
+              id
+              name
+              logoUrl
+              colorPrimary
+              colorSecondary
+            }
+          }
           startTimeScheduled
           format {
             name
@@ -47,4 +56,3 @@ export const GET_SCHEDULED_CS2_SERIES_NEXT_2_WEEKS = gql`
     }
   }
 `;
-

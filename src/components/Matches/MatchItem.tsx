@@ -33,7 +33,7 @@ export const MatchItem = ({ match }) => {
             alignItems: 'center'
           }}>
           <Link
-            to="/tournaments/1"
+            to={`/tournaments/${match.tournament.$id}`}
             style={{ textDecoration: 'none', color: 'inherit' }}>
             <Typography
               variant="body1"
@@ -97,7 +97,7 @@ export const MatchItem = ({ match }) => {
                       color: theme.palette.primary.main
                     }
                   }}>
-                  Team Liquid
+                  {match.homeTeamName}
                 </Typography>
               </Link>
               <Button color="primary" variant="outlined">
@@ -144,7 +144,7 @@ export const MatchItem = ({ match }) => {
                       color: theme.palette.primary.main
                     }
                   }}>
-                  Team FaZe
+                  {match.awayTeamName}
                 </Typography>
               </Link>
               <Button color="primary" variant="outlined">

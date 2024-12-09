@@ -121,6 +121,7 @@ export default async ({ req, res, log, error }) => {
           awayTeamScore: serie.teams[1].score,
           awayTeamWon: serie.teams[1].won,
           awayTeam: serie.teams[1].id,
+          rosterReady: !(serie.teams[0].name === 'TBD-1' || serie.teams[1].name === 'TBD-2'),
           live: serie.started && !serie.finished && serie.valid,
           cancelled: !serie.valid
         }

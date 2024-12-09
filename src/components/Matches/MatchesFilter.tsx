@@ -28,21 +28,21 @@ export const MatchesFilter = () => {
           <Button color="primary" variant="outlined">
             All Tournaments
           </Button>
-          <Button
-            color="secondary"
-            variant="outlined"
-            sx={{
-              gap: '0.5rem'
-            }}>
-            <img
-              src={storage.getFileView(
-                import.meta.env.VITE_APPWRITE_ASSETS_STORAGE_ID,
-                'cs2-logo'
-              )}
-              style={{ height: '1.5rem' }}
-            />
-            Test Tournament
-          </Button>
+          {/*<Button*/}
+          {/*  color="secondary"*/}
+          {/*  variant="outlined"*/}
+          {/*  sx={{*/}
+          {/*    gap: '0.5rem'*/}
+          {/*  }}>*/}
+          {/*  <img*/}
+          {/*    src={storage.getFileView(*/}
+          {/*      import.meta.env.VITE_APPWRITE_ASSETS_STORAGE_ID,*/}
+          {/*      'cs2-logo'*/}
+          {/*    )}*/}
+          {/*    style={{ height: '1.5rem' }}*/}
+          {/*  />*/}
+          {/*  Test Tournament*/}
+          {/*</Button>*/}
           <Button color="secondary" variant="outlined" sx={{}}>
             <MoreHoriz />
           </Button>

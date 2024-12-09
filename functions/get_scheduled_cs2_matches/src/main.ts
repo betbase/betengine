@@ -206,6 +206,7 @@ export default async ({ req, res, log, error }) => {
         homeTeamScore: document?.homeTeamScore || 0,
         awayTeam: serie.teams[1].baseInfo.id,
         awayTeamScore: document?.awayTeamScore || 0,
+        rosterReady: !(serie.teams[0].baseInfo.name === 'TBD-1' || serie.teams[1].baseInfo.name === 'TBD-2'),
         tournament: serie.tournament.id
       };
 

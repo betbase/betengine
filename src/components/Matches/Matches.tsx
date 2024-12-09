@@ -15,7 +15,8 @@ export const Matches = () => {
         'series',
         [
           Query.greaterThanEqual('startTimeScheduled', new Date().toISOString()),
-          Query.orderAsc('startTimeScheduled')
+          Query.orderAsc('startTimeScheduled'),
+          Query.equal('rosterReady', true),
         ]
       );
 

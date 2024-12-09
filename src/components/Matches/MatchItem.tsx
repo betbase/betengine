@@ -87,7 +87,7 @@ export const MatchItem = ({ match }) => {
           <MatchItemTeamGrid size={5}>
             <MatchItemTeamBox>
               <Link
-                to="/teams/1"
+                to={`/teams/${match?.homeTeam?.$id}`}
                 style={{ textDecoration: 'none', color: 'inherit' }}>
                 <Typography
                   variant="h6"
@@ -97,7 +97,7 @@ export const MatchItem = ({ match }) => {
                       color: theme.palette.primary.main
                     }
                   }}>
-                  {match.homeTeamName}
+                  {match?.homeTeam?.name}
                 </Typography>
               </Link>
               <Button color="primary" variant="outlined">
@@ -111,9 +111,9 @@ export const MatchItem = ({ match }) => {
               </Button>
             </MatchItemTeamBox>
             <Link
-              to="/teams/1"
+              to={`/teams/${match?.homeTeam?.$id}`}
               style={{ textDecoration: 'none', color: 'inherit' }}>
-              <img src="https://placehold.co/40" alt="Team A" />
+              <img src={match?.homeTeam?.logoUrl} alt="Team A" width="40px" height="40px" />
             </Link>
           </MatchItemTeamGrid>
           <MatchItemScoreGrid size={2}>
@@ -123,18 +123,18 @@ export const MatchItem = ({ match }) => {
               sx={{
                 fontFamily: "'Iperion W00', sans-serif"
               }}>
-              2 : 1
+              vs
             </Typography>
           </MatchItemScoreGrid>
           <MatchItemTeamGrid size={5}>
             <Link
-              to="/teams/1"
+              to={`/teams/${match?.awayTeam?.$id}`}
               style={{ textDecoration: 'none', color: 'inherit' }}>
-              <img src="https://placehold.co/40" alt="Team B" />
+              <img src={match?.awayTeam?.logoUrl} alt="Team B" width="40x" height="40px"/>
             </Link>
             <MatchItemTeamBox>
               <Link
-                to="/teams/1"
+                to={`/teams/${match?.awayTeam?.$id}`}
                 style={{ textDecoration: 'none', color: 'inherit' }}>
                 <Typography
                   variant="h6"
@@ -144,7 +144,7 @@ export const MatchItem = ({ match }) => {
                       color: theme.palette.primary.main
                     }
                   }}>
-                  {match.awayTeamName}
+                  {match?.awayTeam?.name}
                 </Typography>
               </Link>
               <Button color="primary" variant="outlined">
@@ -174,7 +174,7 @@ export const MatchItem = ({ match }) => {
         </MatchItemFavouriteGrid>
       </MatchItemContainer>
       <MatchItemViewMatchBox>
-        <Link to="/matches/1">
+        <Link to={`/matches/${match.$id}`}>
           <Button
             color="primary"
             variant="contained"

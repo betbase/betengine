@@ -28,7 +28,7 @@ export default async ({ req, res, log, error }) => {
     >(query, { seriesId });
   };
 
-  // Fetch series from database that have not finished, but have start time scheduled in the past
+  // Fetch series from database that have not finished
   const seriesNotFinished = await database.listDocuments(
     Bun.env['DATABASE_ID'],
     'series',
@@ -52,6 +52,23 @@ export default async ({ req, res, log, error }) => {
     seriesNotFinishedIds.map(async (serieId) => {
       try {
         const response = await fetchGraphQL(GET_CS2_SERIES_STATE, serieId);
+
+        if (response?.data?.seriesState === null) {
+          log(
+            `The serie ID ${serieId} is deleted in GRID. Serie is now marked as cancelled.`
+          );
+
+          await database.updateDocument(
+            Bun.env['DATABASE_ID'],
+            'series',
+            serieId,
+            {
+              cancelled: true
+            }
+          );
+
+          return null;
+        }
 
         if (!response?.data.seriesState?.id) {
           log(`No data found for serie ID ${serieId}`);

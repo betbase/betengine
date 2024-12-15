@@ -8,33 +8,38 @@ import './index.css';
 import { AuthProvider } from '@/utils/AuthContext';
 import { VoteslipProvider } from '@/utils/VoteslipContext';
 import { SnackbarProvider } from 'notistack';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+
+const queryClient = new QueryClient();
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <SnackbarProvider
-      maxSnack={1}
-      style={{
-        fontWeight: 600
-      }}
-      TransitionComponent={Grow}
-      autoHideDuration={3000}
-      anchorOrigin={{
-        horizontal: 'right',
-        vertical: 'bottom'
-      }}>
-      <AuthProvider>
-        <VoteslipProvider>
-          <ThemeProvider theme={theme}>
-            <CssBaseline />
-            <RouterProvider
-              router={router}
-              future={{
-                v7_startTransition: true
-              }}
-            />
-          </ThemeProvider>
-        </VoteslipProvider>
-      </AuthProvider>
-    </SnackbarProvider>
+    <QueryClientProvider client={queryClient}>
+      <SnackbarProvider
+        maxSnack={1}
+        style={{
+          fontWeight: 600
+        }}
+        TransitionComponent={Grow}
+        autoHideDuration={3000}
+        anchorOrigin={{
+          horizontal: 'right',
+          vertical: 'bottom'
+        }}>
+        <AuthProvider>
+          <VoteslipProvider>
+            <ThemeProvider theme={theme}>
+              <CssBaseline />
+              <RouterProvider
+                router={router}
+                future={{
+                  v7_startTransition: true
+                }}
+              />
+            </ThemeProvider>
+          </VoteslipProvider>
+        </AuthProvider>
+      </SnackbarProvider>
+    </QueryClientProvider>
   </StrictMode>
 );

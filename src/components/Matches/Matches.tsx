@@ -7,62 +7,68 @@ import { Models, Query } from 'appwrite';
 import { SerieModel } from '@/models/SerieModel';
 import { FavouriteModel } from '@/models/FavouriteModel';
 import { SerieWithFavourite } from '@/models/SerieWithFavourite';
+import { useQuery } from '@tanstack/react-query';
+import { fetchScheduledMatches } from '@/api/queries/FetchScheduledMatches';
 
 export const Matches = () => {
   const [matches, setMatches] = useState<SerieWithFavourite[]>([]);
-  const [loading, setLoading] = useState(true);
 
-  const getMatches = async () => {
-    const userId = localStorage.getItem('userId');
-    if (!userId) return;
-
-    const matchesResponse: Models.DocumentList<SerieModel> =
-      await database.listDocuments(
-        import.meta.env.VITE_APPWRITE_DATABASE_ID,
-        'series',
-        [
-          Query.greaterThanEqual(
-            'startTimeScheduled',
-            new Date().toISOString()
-          ),
-          Query.orderAsc('startTimeScheduled'),
-          Query.equal('rosterReady', true)
-        ]
-      );
-
-    const favouritesResponse: Models.DocumentList<FavouriteModel> =
-      await database.listDocuments(
-        import.meta.env.VITE_APPWRITE_DATABASE_ID,
-        'favourites',
-        [
-          Query.equal(
-            'serie',
-            matchesResponse.documents.map((match) => match.$id)
-          ),
-          Query.equal('user', userId)
-        ]
-      );
-
-    const favouritedSeriesIds = favouritesResponse.documents.map(
-      (favourite) => favourite.serie.$id
-    );
-
-    const matchesResults: SerieWithFavourite[] = matchesResponse.documents.map(
-      (v) => {
-        return {
-          ...v,
-          favourited: favouritedSeriesIds.includes(v.$id)
-        };
-      }
-    );
-
-    setMatches(matchesResults);
-    setLoading(false);
-  };
+  const { data: scheduledMatches, isFetching: loading } = useQuery({
+    queryKey: ['matches'],
+    queryFn: fetchScheduledMatches
+  });
 
   useEffect(() => {
-    getMatches();
-  }, []);
+    setMatches(scheduledMatches || []);
+  }, [scheduledMatches]);
+
+  // const getMatches = async () => {
+  //   const userId = localStorage.getItem('userId');
+  //   if (!userId) return;
+  //
+  //   const matchesResponse: Models.DocumentList<SerieModel> =
+  //     await database.listDocuments(
+  //       import.meta.env.VITE_APPWRITE_DATABASE_ID,
+  //       'series',
+  //       [
+  //         Query.greaterThanEqual(
+  //           'startTimeScheduled',
+  //           new Date().toISOString()
+  //         ),
+  //         Query.orderAsc('startTimeScheduled'),
+  //         Query.equal('rosterReady', true)
+  //       ]
+  //     );
+  //
+  //   const favouritesResponse: Models.DocumentList<FavouriteModel> =
+  //     await database.listDocuments(
+  //       import.meta.env.VITE_APPWRITE_DATABASE_ID,
+  //       'favourites',
+  //       [
+  //         Query.equal(
+  //           'serie',
+  //           matchesResponse.documents.map((match) => match.$id)
+  //         ),
+  //         Query.equal('user', userId)
+  //       ]
+  //     );
+  //
+  //   const favouritedSeriesIds = favouritesResponse.documents.map(
+  //     (favourite) => favourite.serie.$id
+  //   );
+  //
+  //   const matchesResults: SerieWithFavourite[] = matchesResponse.documents.map(
+  //     (v) => {
+  //       return {
+  //         ...v,
+  //         favourited: favouritedSeriesIds.includes(v.$id)
+  //       };
+  //     }
+  //   );
+  //
+  //   setMatches(matchesResults);
+  //   setLoading(false);
+  // };
 
   const handleAddedToFavourites = (serieId: string) => {
     setMatches((prevMatches) =>

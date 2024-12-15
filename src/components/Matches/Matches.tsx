@@ -20,14 +20,9 @@ export const Matches = () => {
   //   refetchOnWindowFocus: false
   // });
 
-  useEffect(() => {
-    console.log('useEffect reached');
-    getMatches();
-  }, []);
-
   const getMatches = async () => {
     const userId = localStorage.getItem('userId');
-    if (!userId) return;
+    const favouritedSeriesIds: string[] = [];
 
     const matchesResponse: Models.DocumentList<SerieModel> =
       await database.listDocuments(
@@ -43,22 +38,24 @@ export const Matches = () => {
         ]
       );
 
-    const favouritesResponse: Models.DocumentList<FavouriteModel> =
-      await database.listDocuments(
-        import.meta.env.VITE_APPWRITE_DATABASE_ID,
-        'favourites',
-        [
-          Query.equal(
-            'serie',
-            matchesResponse.documents.map((match) => match.$id)
-          ),
-          Query.equal('user', userId)
-        ]
-      );
+    if (userId) {
+      const favouritesResponse: Models.DocumentList<FavouriteModel> =
+        await database.listDocuments(
+          import.meta.env.VITE_APPWRITE_DATABASE_ID,
+          'favourites',
+          [
+            Query.equal(
+              'serie',
+              matchesResponse.documents.map((match) => match.$id)
+            ),
+            Query.equal('user', userId)
+          ]
+        );
 
-    const favouritedSeriesIds = favouritesResponse.documents.map(
-      (favourite) => favourite.serie.$id
-    );
+      favouritedSeriesIds.push(
+        ...favouritesResponse.documents.map((favourite) => favourite.serie.$id)
+      );
+    }
 
     const matchesResults: SerieWithFavourite[] = matchesResponse.documents.map(
       (v) => {
@@ -72,6 +69,10 @@ export const Matches = () => {
     setMatches(matchesResults);
     setLoading(false);
   };
+
+  useEffect(() => {
+    getMatches();
+  }, []);
 
   const handleAddedToFavourites = (serieId: string) => {
     setMatches((prevMatches) =>

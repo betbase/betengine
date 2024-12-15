@@ -11,16 +11,17 @@ import { useQuery } from '@tanstack/react-query';
 import { fetchScheduledMatches } from '@/api/queries/FetchScheduledMatches';
 
 export const Matches = () => {
-  const [matches, setMatches] = useState<SerieWithFavourite[]>([]);
+  // const [matches, setMatches] = useState<SerieWithFavourite[]>([]);
 
-  const { data: scheduledMatches, isFetching: loading } = useQuery({
+  const { data: matches, isFetching: loading } = useQuery({
     queryKey: ['matches'],
-    queryFn: fetchScheduledMatches
+    queryFn: fetchScheduledMatches,
+    refetchOnWindowFocus: false
   });
 
-  useEffect(() => {
-    setMatches(scheduledMatches || []);
-  }, [scheduledMatches]);
+  // useEffect(() => {
+  //   setMatches(scheduledMatches || []);
+  // }, [scheduledMatches]);
 
   // const getMatches = async () => {
   //   const userId = localStorage.getItem('userId');

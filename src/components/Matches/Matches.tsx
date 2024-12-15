@@ -72,19 +72,19 @@ export const Matches = () => {
   // };
 
   const handleAddedToFavourites = (serieId: string) => {
-    setMatches((prevMatches) =>
-      prevMatches.map((match) =>
-        match.$id === serieId ? { ...match, favourited: true } : match
-      )
-    );
+    // setMatches((prevMatches) =>
+    //   prevMatches.map((match) =>
+    //     match.$id === serieId ? { ...match, favourited: true } : match
+    //   )
+    // );
   };
 
   const handleRemovedFromFavourites = (serieId: string) => {
-    setMatches((prevMatches) =>
-      prevMatches.map((match) =>
-        match.$id === serieId ? { ...match, favourited: false } : match
-      )
-    );
+    // setMatches((prevMatches) =>
+    //   prevMatches.map((match) =>
+    //     match.$id === serieId ? { ...match, favourited: false } : match
+    //   )
+    // );
   };
 
   return (

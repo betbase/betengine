@@ -1,10 +1,23 @@
-import { Client, Databases, Query } from 'node-appwrite';
+import { Client, Databases, Models, Query } from 'node-appwrite';
 import { GraphQLClient } from 'graphql-request';
 import {
   GetCs2SeriesStateQuery,
   GetCs2SeriesStateQueryVariables
 } from './generated/graphql';
 import { GET_CS2_SERIES_STATE } from './queries';
+
+interface SerieMapModel extends Models.Document {
+  mapName: string;
+  mapId: string;
+  finished: boolean;
+  homeTeamScore: number;
+  homeTeamWon: boolean;
+  awayTeamScore: number;
+  awayTeamWon: boolean;
+  serie: {
+    $id: string;
+  };
+}
 
 export default async ({ req, res, log, error }) => {
   const appwriteClient = new Client()
@@ -42,6 +55,19 @@ export default async ({ req, res, log, error }) => {
 
   log(
     `Found ${seriesNotFinished.documents.length} series not finished but have start time scheduled in the past`
+  );
+
+  const seriesMaps: Models.DocumentList<SerieMapModel> =
+    await database.listDocuments(Bun.env['DATABASE_ID'], 'seriemaps', [
+      Query.equal(
+        'serie',
+        seriesNotFinished.documents.map((v) => v.$id)
+      ),
+      Query.limit(500)
+    ]);
+
+  log(
+    `Found ${seriesMaps.documents.length} series maps for series not finished`
   );
 
   const updatedSeriesFromGrid = await Promise.all(
@@ -121,15 +147,75 @@ export default async ({ req, res, log, error }) => {
           awayTeamScore: serie.teams[1].score,
           awayTeamWon: serie.teams[1].won,
           awayTeam: serie.teams[1].id,
-          rosterReady: !(serie.teams[0].name === 'TBD-1' || serie.teams[1].name === 'TBD-2'),
+          rosterReady: !(
+            serie.teams[0].name === 'TBD-1' || serie.teams[1].name === 'TBD-2'
+          ),
           live: serie.started && !serie.finished && serie.valid,
           cancelled: !serie.valid
         }
       );
 
       log(`Document for serie ID ${serie.id} updated`);
-    } catch (err) {
-      error(`Could not update document: ` + err.message);
+    } catch (e) {
+      error(
+        `Could not update document for serie ID ${serie.id}: ${e.message} `
+      );
+    }
+
+    // Create or update serie maps
+    for (const map of serie.games) {
+      const serieMap = seriesMaps.documents?.find((v) => v.$id === map.id);
+
+      if (serieMap) {
+        try {
+          await database.updateDocument(
+            Bun.env['DATABASE_ID'],
+            'seriemaps',
+            serieMap.$id,
+            {
+              finished: map.finished,
+              homeTeamScore: map.teams[0].score,
+              homeTeamWon:
+                map.finished && map.teams[0].score > map.teams[1].score,
+              awayTeamScore: map.teams[1].score,
+              awayTeamWon:
+                map.finished && map.teams[1].score > map.teams[0].score
+            }
+          );
+
+          log(`Document for serie map ID ${serieMap.$id} updated`);
+        } catch (e) {
+          error(
+            `Could not update document for serie map ID ${serieMap.$id}: ${e.message}`
+          );
+        }
+      } else {
+        try {
+          await database.createDocument(
+            Bun.env['DATABASE_ID'],
+            'seriemaps',
+            map.id,
+            {
+              mapName: map.map.name,
+              mapId: map.map.id,
+              finished: map.finished,
+              homeTeamScore: map.teams[0].score,
+              homeTeamWon:
+                map.finished && map.teams[0].score > map.teams[1].score,
+              awayTeamScore: map.teams[1].score,
+              awayTeamWon:
+                map.finished && map.teams[1].score > map.teams[0].score,
+              serie: serie.id
+            }
+          );
+
+          log(`Document for serie map ID ${map.id} created`);
+        } catch (e) {
+          error(
+            `Could not create document for serie map ID ${map.id}: ${e.message}`
+          );
+        }
+      }
     }
   }
 

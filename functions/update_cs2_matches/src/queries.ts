@@ -1,4 +1,3 @@
-// src/queries.ts
 import { gql } from 'graphql-request';
 
 export const GET_CS2_SERIES_STATE = gql`
@@ -16,6 +15,17 @@ export const GET_CS2_SERIES_STATE = gql`
         name
         won
         score
+      }
+      games {
+        id
+        finished
+        map {
+          id
+          name
+        }
+        teams {
+          score
+        }
       }
     }
   }

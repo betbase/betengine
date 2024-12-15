@@ -208,7 +208,7 @@
                     "relationType": "manyToOne",
                     "twoWay": false,
                     "twoWayKey": "674e1317002f4aff63d3",
-                    "onDelete": "cascade",
+                    "onDelete": "restrict",
                     "side": "parent"
                 },
                 {
@@ -320,7 +320,7 @@
                     "relationType": "manyToOne",
                     "twoWay": false,
                     "twoWayKey": "67523bda000ea1679db5",
-                    "onDelete": "cascade",
+                    "onDelete": "restrict",
                     "side": "parent"
                 },
                 {
@@ -332,7 +332,7 @@
                     "relationType": "manyToOne",
                     "twoWay": false,
                     "twoWayKey": "67575b5c00321df83291",
-                    "onDelete": "setNull",
+                    "onDelete": "restrict",
                     "side": "parent"
                 },
                 {
@@ -344,8 +344,35 @@
                     "relationType": "manyToOne",
                     "twoWay": false,
                     "twoWayKey": "67575b6d001e5c3dca02",
-                    "onDelete": "setNull",
+                    "onDelete": "restrict",
                     "side": "parent"
+                },
+                {
+                    "key": "rosterReady",
+                    "type": "boolean",
+                    "required": true,
+                    "array": false,
+                    "default": null
+                },
+                {
+                    "key": "streamChannel",
+                    "type": "string",
+                    "required": false,
+                    "array": false,
+                    "size": 128,
+                    "default": null
+                },
+                {
+                    "key": "streamProvider",
+                    "type": "string",
+                    "required": false,
+                    "array": false,
+                    "elements": [
+                        "twitch",
+                        "youtube"
+                    ],
+                    "format": "enum",
+                    "default": null
                 }
             ],
             "indexes": []
@@ -356,7 +383,7 @@
             "databaseId": "betengine",
             "name": "Users",
             "enabled": true,
-            "documentSecurity": false,
+            "documentSecurity": true,
             "attributes": [
                 {
                     "key": "currency",
@@ -391,6 +418,146 @@
                     "required": false,
                     "array": false,
                     "default": false
+                }
+            ],
+            "indexes": []
+        },
+        {
+            "$id": "predictions",
+            "$permissions": [],
+            "databaseId": "betengine",
+            "name": "Predictions",
+            "enabled": true,
+            "documentSecurity": false,
+            "attributes": [
+                {
+                    "key": "serie",
+                    "type": "relationship",
+                    "required": false,
+                    "array": false,
+                    "relatedCollection": "series",
+                    "relationType": "manyToOne",
+                    "twoWay": false,
+                    "twoWayKey": "675783ed00075f646934",
+                    "onDelete": "restrict",
+                    "side": "parent"
+                },
+                {
+                    "key": "proposedWinner",
+                    "type": "relationship",
+                    "required": false,
+                    "array": false,
+                    "relatedCollection": "teams",
+                    "relationType": "manyToOne",
+                    "twoWay": false,
+                    "twoWayKey": "67578410001b9a548ea6",
+                    "onDelete": "restrict",
+                    "side": "parent"
+                },
+                {
+                    "key": "user",
+                    "type": "relationship",
+                    "required": false,
+                    "array": false,
+                    "relatedCollection": "users",
+                    "relationType": "manyToOne",
+                    "twoWay": false,
+                    "twoWayKey": "6757842e0032baa0d1e3",
+                    "onDelete": "restrict",
+                    "side": "parent"
+                },
+                {
+                    "key": "stake",
+                    "type": "integer",
+                    "required": true,
+                    "array": false,
+                    "min": 10,
+                    "max": 9223372036854775807,
+                    "default": null
+                },
+                {
+                    "key": "settledAt",
+                    "type": "datetime",
+                    "required": false,
+                    "array": false,
+                    "format": "",
+                    "default": null
+                }
+            ],
+            "indexes": []
+        },
+        {
+            "$id": "favourites",
+            "$permissions": [
+                "create(\"users\")"
+            ],
+            "databaseId": "betengine",
+            "name": "Favourites",
+            "enabled": true,
+            "documentSecurity": true,
+            "attributes": [
+                {
+                    "key": "serie",
+                    "type": "relationship",
+                    "required": false,
+                    "array": false,
+                    "relatedCollection": "series",
+                    "relationType": "manyToOne",
+                    "twoWay": false,
+                    "twoWayKey": "675841240009b800ce1d",
+                    "onDelete": "cascade",
+                    "side": "parent"
+                },
+                {
+                    "key": "user",
+                    "type": "relationship",
+                    "required": false,
+                    "array": false,
+                    "relatedCollection": "users",
+                    "relationType": "manyToOne",
+                    "twoWay": false,
+                    "twoWayKey": "675841380005872a7ec7",
+                    "onDelete": "cascade",
+                    "side": "parent"
+                }
+            ],
+            "indexes": []
+        },
+        {
+            "$id": "seriemaps",
+            "$permissions": [],
+            "databaseId": "betengine",
+            "name": "SerieMaps",
+            "enabled": true,
+            "documentSecurity": false,
+            "attributes": [
+                {
+                    "key": "serie",
+                    "type": "relationship",
+                    "required": false,
+                    "array": false,
+                    "relatedCollection": "series",
+                    "relationType": "manyToOne",
+                    "twoWay": false,
+                    "twoWayKey": "675ea92f002a4fc05012",
+                    "onDelete": "setNull",
+                    "side": "parent"
+                },
+                {
+                    "key": "mapName",
+                    "type": "string",
+                    "required": true,
+                    "array": false,
+                    "size": 128,
+                    "default": null
+                },
+                {
+                    "key": "mapId",
+                    "type": "string",
+                    "required": true,
+                    "array": false,
+                    "size": 64,
+                    "default": null
                 }
             ],
             "indexes": []

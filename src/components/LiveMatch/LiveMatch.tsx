@@ -17,6 +17,9 @@ import { SerieWithFavourite } from '@/models/SerieWithFavourite';
 import { removeFromFavourites } from '@/utils/RemoveFromFavourites';
 import { addToFavourites } from '@/utils/AddToFavourites';
 import StarIcon from '@mui/icons-material/Star';
+import { MatchPrediction, useVoteslip } from '@/utils/VoteslipContext';
+import { TeamModel } from '@/models/TeamModel';
+import { PredictionTypeEnum } from '@/models/PredictionTypeEnum';
 
 interface Props {
   match: SerieWithFavourite;
@@ -30,6 +33,20 @@ export const LiveMatch = ({
   onRemovedFromFavourites
 }: Props) => {
   const theme = useTheme();
+  const { addPrediction } = useVoteslip();
+
+  console.log(match);
+
+  const handleAddPrediction = (proposedWinner: TeamModel) => {
+    const prediction: MatchPrediction = {
+      serie: match,
+      predictionType: PredictionTypeEnum.MATCH_WINNER,
+      proposedWinner: proposedWinner,
+      stake: 10
+    };
+
+    addPrediction(prediction);
+  };
 
   return (
     <Box
@@ -109,7 +126,10 @@ export const LiveMatch = ({
                 <Typography variant="h6" fontWeight={600}>
                   {match.homeTeam.name}
                 </Typography>
-                <Button color="primary" variant="outlined">
+                <Button
+                  color="primary"
+                  variant="outlined"
+                  onClick={() => handleAddPrediction(match.homeTeam)}>
                   Vote{' '}
                   <DiamondSharp
                     sx={{
@@ -137,21 +157,15 @@ export const LiveMatch = ({
                     mt: '1rem',
                     gap: '0.25rem'
                   }}>
-                  <Typography
-                    variant="body2"
-                    color={theme.palette.text.secondary}
-                    fontWeight={600}>
-                    1 | Map 1 | 0
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    color={theme.palette.text.secondary}
-                    fontWeight={600}>
-                    1 | Map 2 | 1
-                  </Typography>
-                  <Typography variant="body2" fontWeight={600}>
-                    2 | Map 3 | 1
-                  </Typography>
+                  {match.serieMaps?.map((map, index) => (
+                    <Typography
+                      key={index}
+                      variant="body2"
+                      color={theme.palette.text.secondary}
+                      fontWeight={600}>
+                      | {map.mapName.toUpperCase()} |
+                    </Typography>
+                  ))}
                 </Box>
               </Score>
               <Team size={4}>
@@ -159,7 +173,10 @@ export const LiveMatch = ({
                 <Typography variant="h6" fontWeight={600}>
                   {match.awayTeam.name}
                 </Typography>
-                <Button color="primary" variant="outlined">
+                <Button
+                  color="primary"
+                  variant="outlined"
+                  onClick={() => handleAddPrediction(match.awayTeam)}>
                   Vote{' '}
                   <DiamondSharp
                     sx={{

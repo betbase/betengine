@@ -14,7 +14,6 @@ import { Link } from 'react-router-dom';
 import StarOutlineIcon from '@mui/icons-material/StarOutline';
 import StarIcon from '@mui/icons-material/Star';
 import { DiamondSharp } from '@mui/icons-material';
-import { SerieModel } from '@/models/SerieModel';
 import { MatchPrediction, useVoteslip } from '@/utils/VoteslipContext';
 import { TeamModel } from '@/models/TeamModel';
 import { PredictionTypeEnum } from '@/models/PredictionTypeEnum';

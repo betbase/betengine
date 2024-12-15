@@ -936,6 +936,16 @@ export type GamePlayerStateLol = GamePlayerState & {
   currentArmor: Scalars['Int']['output'];
   /** The current health of the player. */
   currentHealth: Scalars['Int']['output'];
+  /** The amount of damage dealt (available from version "3.23"). */
+  damageDealt: Scalars['Int']['output'];
+  /** The amount of damage dealt per minute (available from version "3.24"). */
+  damagePerMinute: Scalars['Float']['output'];
+  /** The amount of damage dealt per money earned (available from version "3.26"). */
+  damagePerMoney: Scalars['Float']['output'];
+  /** The percentage of damage dealt compared to the overall damage dealt by the player's team (available from version "3.25"). */
+  damagePercentage: Scalars['Float']['output'];
+  /** The amount of damage taken (available from version "3.23"). */
+  damageTaken: Scalars['Int']['output'];
   /** Number of deaths for this Player in this Game. */
   deaths: Scalars['Int']['output'];
   /** The amount of experience points gathered by this player. */
@@ -948,6 +958,8 @@ export type GamePlayerStateLol = GamePlayerState & {
   id: Scalars['ID']['output'];
   /** The Player's inventory */
   inventory: PlayerInventory;
+  /** The ratio of kills and assists given vs deaths (available from version "3.27"). */
+  kdaRatio: Scalars['Float']['output'];
   /** Number of enemy kill assists provided by this Player in this Game. */
   killAssistsGiven: Scalars['Int']['output'];
   /** Number of enemy kill assists received by this Player in this Game. */
@@ -1239,6 +1251,14 @@ export type GamePlayerStateValorant = GamePlayerState & {
   currentArmor: Scalars['Int']['output'];
   /** The current health of the player (available from version "1.9"). */
   currentHealth: Scalars['Int']['output'];
+  /** The amount of damage dealt (available from version "3.29"). */
+  damageDealt: Scalars['Int']['output'];
+  /** A list of damage sources (available from version "3.29"). */
+  damageDealtSources: Array<DamageDealtSource>;
+  /** A list of damage targets (available from version "3.29"). */
+  damageDealtTargets: Array<DamageDealtTarget>;
+  /** The amount of total damage taken (available from version "3.29"). */
+  damageTaken: Scalars['Int']['output'];
   /** Number of deaths for this Player in this Game. */
   deaths: Scalars['Int']['output'];
   /** Indication of player acquiring first kill. */
@@ -1278,6 +1298,10 @@ export type GamePlayerStateValorant = GamePlayerState & {
   participationStatus: ParticipationStatus;
   /** Player Coordinates on the map */
   position?: Maybe<Coordinates>;
+  /** The amount of damage dealt to self (available from version "3.29"). */
+  selfdamageDealt: Scalars['Int']['output'];
+  /** The amount of damage taken from self (available from version "3.29"). */
+  selfdamageTaken: Scalars['Int']['output'];
   /** Number of selfkills (suicides) for this Player in this Game. */
   selfkills: Scalars['Int']['output'];
   /** Number of structures captured by this Player in this Game. */
@@ -1286,6 +1310,10 @@ export type GamePlayerStateValorant = GamePlayerState & {
   structuresDestroyed: Scalars['Int']['output'];
   /** Number of team headshots for this Player. */
   teamHeadshots: Scalars['Int']['output'];
+  /** The amount of damage dealt to team (available from version "3.29"). */
+  teamdamageDealt: Scalars['Int']['output'];
+  /** The amount of damage taken from team (available from version "3.29"). */
+  teamdamageTaken: Scalars['Int']['output'];
   /**
    * Number of teamkill assists provided by this Player in this Game.
    * A teamkill is the occurrence of killing an allied member
@@ -1802,6 +1830,14 @@ export type GameTeamStateDota = GameTeamState & {
 /** LoL data points for a Team, aggregated for a Game. */
 export type GameTeamStateLol = GameTeamState & {
   __typename?: 'GameTeamStateLol';
+  /** The amount of damage dealt (available from version "3.23"). */
+  damageDealt: Scalars['Int']['output'];
+  /** The amount of damage dealt per minute (available from version "3.24"). */
+  damagePerMinute: Scalars['Float']['output'];
+  /** The amount of damage dealt per money earned (available from version "3.26"). */
+  damagePerMoney: Scalars['Float']['output'];
+  /** The amount of damage taken (available from version "3.23"). */
+  damageTaken: Scalars['Int']['output'];
   /** Number of deaths for this Team in this Game. */
   deaths: Scalars['Int']['output'];
   /** The amount of experience points gathered by this team. */
@@ -1812,6 +1848,8 @@ export type GameTeamStateLol = GameTeamState & {
   headshots: Scalars['Int']['output'];
   /** GRID ID of this Team. */
   id: Scalars['ID']['output'];
+  /** The ratio of kills and assists given vs deaths (available from version "3.27"). */
+  kdaRatio: Scalars['Float']['output'];
   /** Number of enemy kill assists provided by this Team in this Game. */
   killAssistsGiven: Scalars['Int']['output'];
   /** Number of enemy kill assists received by this Team in this Game. */
@@ -1827,6 +1865,8 @@ export type GameTeamStateLol = GameTeamState & {
    * Depending on the Title this may represent in-game gold, credits, gems etc.
    */
   money: Scalars['Int']['output'];
+  /** The total money earned difference to the opponent team (available from version "3.28"). */
+  moneyDifference: Scalars['Int']['output'];
   /** A list of multi kills that happened by this Team in this Game (available from version "1.7"). */
   multikills: Array<Multikill>;
   /** Name of this Team. */
@@ -2076,6 +2116,14 @@ export type GameTeamStateR6 = GameTeamState & {
 /** Valorant data points for a Team, aggregated for a Game. */
 export type GameTeamStateValorant = GameTeamState & {
   __typename?: 'GameTeamStateValorant';
+  /** The amount of damage dealt (available from version "3.29"). */
+  damageDealt: Scalars['Int']['output'];
+  /** A list of damage sources (available from version "3.29"). */
+  damageDealtSources: Array<DamageDealtSource>;
+  /** A list of damage targets (available from version "3.29"). */
+  damageDealtTargets: Array<DamageDealtTarget>;
+  /** The amount of total damage taken (available from version "3.29"). */
+  damageTaken: Scalars['Int']['output'];
   /** Number of deaths for this Team in this Game. */
   deaths: Scalars['Int']['output'];
   /** Indication of team acquiring first kill. */
@@ -2111,6 +2159,10 @@ export type GameTeamStateValorant = GameTeamState & {
   players: Array<GamePlayerState>;
   /** Score for this Team in this Game. This is used in the Score After format. */
   score: Scalars['Int']['output'];
+  /** The amount of damage dealt to self (available from version "3.29"). */
+  selfdamageDealt: Scalars['Int']['output'];
+  /** The amount of damage taken from self (available from version "3.29"). */
+  selfdamageTaken: Scalars['Int']['output'];
   /** Number of selfkills (suicides) for this Team in this Game. */
   selfkills: Scalars['Int']['output'];
   /** Side that this Team has taken in this Game ie Red or Blue, Terrorists or Counter-Terrorists. */
@@ -2121,6 +2173,10 @@ export type GameTeamStateValorant = GameTeamState & {
   structuresDestroyed: Scalars['Int']['output'];
   /** Number of allied headshots for this Player. */
   teamHeadshots: Scalars['Int']['output'];
+  /** The amount of damage dealt to team (available from version "3.29"). */
+  teamdamageDealt: Scalars['Int']['output'];
+  /** The amount of damage taken from team (available from version "3.29"). */
+  teamdamageTaken: Scalars['Int']['output'];
   /**
    * Number of teamkill assists provided by this Team in this Game.
    * A teamkill is the occurrence of killing an allied member.
@@ -2642,6 +2698,14 @@ export type SegmentPlayerStateValorant = SegmentPlayerState & {
   currentArmor: Scalars['Int']['output'];
   /** The current health of the player (available from version "1.9"). */
   currentHealth: Scalars['Int']['output'];
+  /** The amount of damage dealt (available from version "3.29"). */
+  damageDealt: Scalars['Int']['output'];
+  /** A list of damage sources (available from version "3.29"). */
+  damageDealtSources: Array<DamageDealtSource>;
+  /** A list of damage targets (available from version "3.29"). */
+  damageDealtTargets: Array<DamageDealtTarget>;
+  /** The amount of total damage taken (available from version "3.29"). */
+  damageTaken: Scalars['Int']['output'];
   /** Number of deaths for this Player in this Segment. */
   deaths: Scalars['Int']['output'];
   /** Indication of player acquiring first kill. */
@@ -2666,10 +2730,18 @@ export type SegmentPlayerStateValorant = SegmentPlayerState & {
   objectives: Array<Objective>;
   /** Indicates the participation status of a player for this Segment (available from version "3.8"). */
   participationStatus: ParticipationStatus;
+  /** The amount of damage dealt to self (available from version "3.29"). */
+  selfdamageDealt: Scalars['Int']['output'];
+  /** The amount of damage taken from self (available from version "3.29"). */
+  selfdamageTaken: Scalars['Int']['output'];
   /** Number of selfkills (suicides) for this Player in this Segment. */
   selfkills: Scalars['Int']['output'];
   /** Number of team headshots for this Player. */
   teamHeadshots: Scalars['Int']['output'];
+  /** The amount of damage dealt to team (available from version "3.29"). */
+  teamdamageDealt: Scalars['Int']['output'];
+  /** The amount of damage taken from team (available from version "3.29"). */
+  teamdamageTaken: Scalars['Int']['output'];
   /**
    * Number of teamkill assists provided by this Player in this Segment.
    * A teamkill is the occurrence of killing an allied member
@@ -3074,6 +3146,14 @@ export type SegmentTeamStateR6 = SegmentTeamState & {
 /** Valorant data points for a Team, aggregated for a Segment. */
 export type SegmentTeamStateValorant = SegmentTeamState & {
   __typename?: 'SegmentTeamStateValorant';
+  /** The amount of damage dealt (available from version "3.29"). */
+  damageDealt: Scalars['Int']['output'];
+  /** A list of damage sources (available from version "3.29"). */
+  damageDealtSources: Array<DamageDealtSource>;
+  /** A list of damage targets (available from version "3.29"). */
+  damageDealtTargets: Array<DamageDealtTarget>;
+  /** The amount of total damage taken (available from version "3.29"). */
+  damageTaken: Scalars['Int']['output'];
   /** Number of deaths for this Team in this Segment. */
   deaths: Scalars['Int']['output'];
   /** Indication of team acquiring first kill. */
@@ -3096,12 +3176,20 @@ export type SegmentTeamStateValorant = SegmentTeamState & {
   objectives: Array<Objective>;
   /** A list of SegmentPlayerState, containing information about the Players that are members of this Team. */
   players: Array<SegmentPlayerState>;
+  /** The amount of damage dealt to self (available from version "3.29"). */
+  selfdamageDealt: Scalars['Int']['output'];
+  /** The amount of damage taken from self (available from version "3.29"). */
+  selfdamageTaken: Scalars['Int']['output'];
   /** Number of selfkills (suicides) for this Team in this Segment. */
   selfkills: Scalars['Int']['output'];
   /** Side that this Team has taken in this Segment ie Red or Blue, Terrorists or Counter-Terrorists. */
   side: Scalars['String']['output'];
   /** Number of allied headshots for this Player. */
   teamHeadshots: Scalars['Int']['output'];
+  /** The amount of damage dealt to team (available from version "3.29"). */
+  teamdamageDealt: Scalars['Int']['output'];
+  /** The amount of damage taken from team (available from version "3.29"). */
+  teamdamageTaken: Scalars['Int']['output'];
   /**
    * Number of teamkill assists provided by this Team in this Segment.
    * A teamkill is the occurrence of killing an allied member.
@@ -4308,7 +4396,7 @@ export type GetCs2SeriesStateQueryVariables = Exact<{
 }>;
 
 
-export type GetCs2SeriesStateQuery = { __typename?: 'Query', seriesState?: { __typename?: 'SeriesState', id: string, valid: boolean, updatedAt: any, format: string, started: boolean, startedAt?: any | null, finished: boolean, teams: Array<{ __typename?: 'SeriesTeamStateCs2', id: string, name: string, won: boolean, score: number } | { __typename?: 'SeriesTeamStateCsgo', id: string, name: string, won: boolean, score: number } | { __typename?: 'SeriesTeamStateDefault', id: string, name: string, won: boolean, score: number } | { __typename?: 'SeriesTeamStateDota', id: string, name: string, won: boolean, score: number } | { __typename?: 'SeriesTeamStatePubg', id: string, name: string, won: boolean, score: number } | { __typename?: 'SeriesTeamStateR6', id: string, name: string, won: boolean, score: number } | { __typename?: 'SeriesTeamStateValorant', id: string, name: string, won: boolean, score: number }> } | null };
+export type GetCs2SeriesStateQuery = { __typename?: 'Query', seriesState?: { __typename?: 'SeriesState', id: string, valid: boolean, updatedAt: any, format: string, started: boolean, startedAt?: any | null, finished: boolean, teams: Array<{ __typename?: 'SeriesTeamStateCs2', id: string, name: string, won: boolean, score: number } | { __typename?: 'SeriesTeamStateCsgo', id: string, name: string, won: boolean, score: number } | { __typename?: 'SeriesTeamStateDefault', id: string, name: string, won: boolean, score: number } | { __typename?: 'SeriesTeamStateDota', id: string, name: string, won: boolean, score: number } | { __typename?: 'SeriesTeamStatePubg', id: string, name: string, won: boolean, score: number } | { __typename?: 'SeriesTeamStateR6', id: string, name: string, won: boolean, score: number } | { __typename?: 'SeriesTeamStateValorant', id: string, name: string, won: boolean, score: number }>, games: Array<{ __typename?: 'GameState', id: string, finished: boolean, map: { __typename?: 'MapState', id: string, name: string }, teams: Array<{ __typename?: 'GameTeamStateCs2', score: number } | { __typename?: 'GameTeamStateCsgo', score: number } | { __typename?: 'GameTeamStateDefault', score: number } | { __typename?: 'GameTeamStateDota', score: number } | { __typename?: 'GameTeamStateLol', score: number } | { __typename?: 'GameTeamStatePubg', score: number } | { __typename?: 'GameTeamStateR6', score: number } | { __typename?: 'GameTeamStateValorant', score: number }> }> } | null };
 
 
 export const GetCs2SeriesStateDocument = gql`
@@ -4326,6 +4414,17 @@ export const GetCs2SeriesStateDocument = gql`
       name
       won
       score
+    }
+    games {
+      id
+      finished
+      map {
+        id
+        name
+      }
+      teams {
+        score
+      }
     }
   }
 }

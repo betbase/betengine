@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import { SerieWithFavourite } from '@/models/SerieWithFavourite';
 import { useQuery } from '@tanstack/react-query';
 import { fetchLiveMatches } from '@/api/queries/FetchLiveMatches';
+import Carousel from 'react-material-ui-carousel';
 
 export const HomePage = () => {
   const [liveMatches, setLiveMatches] = useState<SerieWithFavourite[]>([]);
@@ -42,13 +43,19 @@ export const HomePage = () => {
         flexDirection: 'column',
         rowGap: '1rem'
       }}>
-      {liveMatches.length > 0 && (
-        <LiveMatch
-          match={liveMatches[1]}
-          onAddedToFavourites={handleAddedToFavourites}
-          onRemovedFromFavourites={handleRemovedFromFavourites}
-        />
+      {liveMatches?.length > 0 && (
+        <Carousel autoPlay={false}>
+          {liveMatches.map((match) => (
+            <LiveMatch
+              key={match.$id}
+              match={match}
+              onAddedToFavourites={handleAddedToFavourites}
+              onRemovedFromFavourites={handleRemovedFromFavourites}
+            />
+          ))}
+        </Carousel>
       )}
+
       <Matches />
     </Box>
   );

@@ -20,6 +20,9 @@ import StarIcon from '@mui/icons-material/Star';
 import { MatchPrediction, useVoteslip } from '@/utils/VoteslipContext';
 import { TeamModel } from '@/models/TeamModel';
 import { PredictionTypeEnum } from '@/models/PredictionTypeEnum';
+import { client } from '@/appwrite';
+import { useEffect, useState } from 'react';
+import { SerieMapModel } from '@/models/SerieMapModel';
 
 interface Props {
   match: SerieWithFavourite;
@@ -35,6 +38,16 @@ export const LiveMatch = ({
   const theme = useTheme();
   const { addPrediction } = useVoteslip();
 
+  const [homeTeamScore, setHomeTeamScore] = useState<number>(
+    match.homeTeamScore
+  );
+  const [awayTeamScore, setAwayTeamScore] = useState<number>(
+    match.awayTeamScore
+  );
+  const [serieMaps, setSerieMaps] = useState<SerieMapModel[]>(
+    match.serieMaps || []
+  );
+
   const handleAddPrediction = (proposedWinner: TeamModel) => {
     const prediction: MatchPrediction = {
       serie: match,
@@ -45,6 +58,21 @@ export const LiveMatch = ({
 
     addPrediction(prediction);
   };
+
+  useEffect(() => {
+    const subscribe = client.subscribe(
+      `databases.${import.meta.env.VITE_APPWRITE_DATABASE_ID}.collections.series.documents.${match.$id}`,
+      (response) => {
+        setHomeTeamScore(response.payload.homeTeamScore);
+        setAwayTeamScore(response.payload.awayTeamScore);
+        setSerieMaps(response.payload.serieMaps);
+      }
+    );
+
+    return () => {
+      subscribe();
+    };
+  }, []);
 
   return (
     <Box
@@ -145,7 +173,7 @@ export const LiveMatch = ({
                     mb: '0.25rem',
                     fontFamily: "'Iperion W00', sans-serif"
                   }}>
-                  {match.homeTeamScore} : {match.awayTeamScore}
+                  {homeTeamScore} : {awayTeamScore}
                 </Typography>
                 <LiveChip />
                 <Box
@@ -155,7 +183,7 @@ export const LiveMatch = ({
                     mt: '1rem',
                     gap: '0.25rem'
                   }}>
-                  {match.serieMaps
+                  {serieMaps
                     ?.sort((a, b) => Number(b.finished) - Number(a.finished))
                     .map((map, index) => (
                       <Typography

@@ -44,7 +44,7 @@ export const HomePage = () => {
       }}>
       {liveMatches.length > 0 && (
         <LiveMatch
-          match={liveMatches[0]}
+          match={liveMatches[1]}
           onAddedToFavourites={handleAddedToFavourites}
           onRemovedFromFavourites={handleRemovedFromFavourites}
         />

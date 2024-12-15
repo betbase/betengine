@@ -18,17 +18,18 @@ export const fetchLiveMatches = async (): Promise<
     );
 
   if (userId) {
-    const favouritesResponse = (await database.listDocuments(
-      import.meta.env.VITE_APPWRITE_DATABASE_ID,
-      'favourites',
-      [
-        Query.equal(
-          'serie',
-          liveMatchesResponse.documents.map((match) => match.$id)
-        ),
-        Query.equal('user', userId)
-      ]
-    )) as Models.DocumentList<FavouriteModel>;
+    const favouritesResponse: Models.DocumentList<FavouriteModel> =
+      await database.listDocuments(
+        import.meta.env.VITE_APPWRITE_DATABASE_ID,
+        'favourites',
+        [
+          Query.equal(
+            'serie',
+            liveMatchesResponse.documents.map((match) => match.$id)
+          ),
+          Query.equal('user', userId)
+        ]
+      );
 
     favouritedSeriesIds.push(
       ...favouritesResponse.documents.map((favourite) => favourite.serie.$id)

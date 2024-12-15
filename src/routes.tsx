@@ -3,7 +3,6 @@ import { createBrowserRouter } from 'react-router-dom';
 import { HomePage } from '@/pages/HomePage';
 import { ErrorNotFoundPage } from '@/pages/ErrorNotFoundPage';
 import { PageLayout } from '@/components/Layout/PageLayout';
-import { MatchesPage } from '@/pages/MatchesPage';
 import { AuthLayout } from '@/components/Layout/AuthLayout';
 import {
   Home as HomeIcon,
@@ -15,6 +14,7 @@ import {
 import { LoginPage } from '@/pages/Auth/LoginPage';
 import { ProtectedRoute } from '@/utils/ProtectedRoute';
 import { SignupPage } from '@/pages/Auth/SignupPage';
+import { MatchPage } from '@/pages/MatchPage';
 
 interface Route {
   id: string;
@@ -54,16 +54,10 @@ export const routes: Routes = {
     element: <HomePage />,
     icon: <MatchesIcon />
   },
-  // matches: {
-  //   id: 'Matches',
-  //   path: '/matches',
-  //   element: <MatchesPage />,
-  //   icon: <MatchesIcon />
-  // },
   match: {
     id: 'Match',
     path: '/matches/:id',
-    element: <HomePage />
+    element: <MatchPage />
   },
   tournaments: {
     id: 'Tournaments',

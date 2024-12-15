@@ -17,7 +17,7 @@ export const MatchesFilter = () => {
           alignItems: 'center'
         }}>
         <Typography variant="h5" fontWeight={600}>
-          Live Matches
+          Scheduled Matches
         </Typography>
         <Box
           sx={{

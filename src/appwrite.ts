@@ -2,6 +2,7 @@ import { Account, Client, Databases, Functions, Storage } from 'appwrite';
 
 export const client: Client = new Client();
 client.setProject(import.meta.env.VITE_APPWRITE_PROJECT_ID);
+client.setEndpointRealtime('wss://cloud.appwrite.io/v1/realtime');
 
 export const database: Databases = new Databases(client);
 

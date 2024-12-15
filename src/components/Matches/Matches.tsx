@@ -11,80 +11,82 @@ import { useQuery } from '@tanstack/react-query';
 import { fetchScheduledMatches } from '@/api/queries/FetchScheduledMatches';
 
 export const Matches = () => {
-  // const [matches, setMatches] = useState<SerieWithFavourite[]>([]);
+  const [matches, setMatches] = useState<SerieWithFavourite[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const { data: matches, isFetching: loading } = useQuery({
-    queryKey: ['matches'],
-    queryFn: fetchScheduledMatches,
-    refetchOnWindowFocus: false
-  });
+  // const { data: matches, isFetching: loading } = useQuery({
+  //   queryKey: ['matches'],
+  //   queryFn: fetchScheduledMatches,
+  //   refetchOnWindowFocus: false
+  // });
 
-  // useEffect(() => {
-  //   setMatches(scheduledMatches || []);
-  // }, [scheduledMatches]);
+  useEffect(() => {
+    console.log('useEffect reached');
+    getMatches();
+  }, []);
 
-  // const getMatches = async () => {
-  //   const userId = localStorage.getItem('userId');
-  //   if (!userId) return;
-  //
-  //   const matchesResponse: Models.DocumentList<SerieModel> =
-  //     await database.listDocuments(
-  //       import.meta.env.VITE_APPWRITE_DATABASE_ID,
-  //       'series',
-  //       [
-  //         Query.greaterThanEqual(
-  //           'startTimeScheduled',
-  //           new Date().toISOString()
-  //         ),
-  //         Query.orderAsc('startTimeScheduled'),
-  //         Query.equal('rosterReady', true)
-  //       ]
-  //     );
-  //
-  //   const favouritesResponse: Models.DocumentList<FavouriteModel> =
-  //     await database.listDocuments(
-  //       import.meta.env.VITE_APPWRITE_DATABASE_ID,
-  //       'favourites',
-  //       [
-  //         Query.equal(
-  //           'serie',
-  //           matchesResponse.documents.map((match) => match.$id)
-  //         ),
-  //         Query.equal('user', userId)
-  //       ]
-  //     );
-  //
-  //   const favouritedSeriesIds = favouritesResponse.documents.map(
-  //     (favourite) => favourite.serie.$id
-  //   );
-  //
-  //   const matchesResults: SerieWithFavourite[] = matchesResponse.documents.map(
-  //     (v) => {
-  //       return {
-  //         ...v,
-  //         favourited: favouritedSeriesIds.includes(v.$id)
-  //       };
-  //     }
-  //   );
-  //
-  //   setMatches(matchesResults);
-  //   setLoading(false);
-  // };
+  const getMatches = async () => {
+    const userId = localStorage.getItem('userId');
+    if (!userId) return;
+
+    const matchesResponse: Models.DocumentList<SerieModel> =
+      await database.listDocuments(
+        import.meta.env.VITE_APPWRITE_DATABASE_ID,
+        'series',
+        [
+          Query.greaterThanEqual(
+            'startTimeScheduled',
+            new Date().toISOString()
+          ),
+          Query.orderAsc('startTimeScheduled'),
+          Query.equal('rosterReady', true)
+        ]
+      );
+
+    const favouritesResponse: Models.DocumentList<FavouriteModel> =
+      await database.listDocuments(
+        import.meta.env.VITE_APPWRITE_DATABASE_ID,
+        'favourites',
+        [
+          Query.equal(
+            'serie',
+            matchesResponse.documents.map((match) => match.$id)
+          ),
+          Query.equal('user', userId)
+        ]
+      );
+
+    const favouritedSeriesIds = favouritesResponse.documents.map(
+      (favourite) => favourite.serie.$id
+    );
+
+    const matchesResults: SerieWithFavourite[] = matchesResponse.documents.map(
+      (v) => {
+        return {
+          ...v,
+          favourited: favouritedSeriesIds.includes(v.$id)
+        };
+      }
+    );
+
+    setMatches(matchesResults);
+    setLoading(false);
+  };
 
   const handleAddedToFavourites = (serieId: string) => {
-    // setMatches((prevMatches) =>
-    //   prevMatches.map((match) =>
-    //     match.$id === serieId ? { ...match, favourited: true } : match
-    //   )
-    // );
+    setMatches((prevMatches) =>
+      prevMatches.map((match) =>
+        match.$id === serieId ? { ...match, favourited: true } : match
+      )
+    );
   };
 
   const handleRemovedFromFavourites = (serieId: string) => {
-    // setMatches((prevMatches) =>
-    //   prevMatches.map((match) =>
-    //     match.$id === serieId ? { ...match, favourited: false } : match
-    //   )
-    // );
+    setMatches((prevMatches) =>
+      prevMatches.map((match) =>
+        match.$id === serieId ? { ...match, favourited: false } : match
+      )
+    );
   };
 
   return (

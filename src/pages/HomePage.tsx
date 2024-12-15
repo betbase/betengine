@@ -2,14 +2,22 @@ import { LiveMatch } from '@/components/LiveMatch/LiveMatch';
 import { Matches } from '@/components/Matches/Matches';
 import { Box } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { database } from '@/appwrite';
-import { Models, Query } from 'appwrite';
-import { SerieModel } from '@/models/SerieModel';
 import { SerieWithFavourite } from '@/models/SerieWithFavourite';
-import { FavouriteModel } from '@/models/FavouriteModel';
+import { useQuery } from '@tanstack/react-query';
+import { fetchLiveMatches } from '@/api/queries/FetchLiveMatches';
 
 export const HomePage = () => {
   const [liveMatches, setLiveMatches] = useState<SerieWithFavourite[]>([]);
+
+  const { data } = useQuery({
+    queryKey: ['liveMatches'],
+    queryFn: fetchLiveMatches,
+    refetchOnWindowFocus: false
+  });
+
+  useEffect(() => {
+    setLiveMatches(data || []);
+  }, [data]);
 
   const handleAddedToFavourites = (serieId: string) => {
     setLiveMatches((prevMatches) =>
@@ -26,47 +34,6 @@ export const HomePage = () => {
       )
     );
   };
-
-  useEffect(() => {
-    const userId = localStorage.getItem('userId');
-    if (!userId) return;
-
-    const getLiveMatches = async () => {
-      const liveMatchesResponse: Models.DocumentList<SerieModel> =
-        await database.listDocuments(
-          import.meta.env.VITE_APPWRITE_DATABASE_ID,
-          'series',
-          [Query.equal('live', true), Query.equal('finished', false)]
-        );
-
-      const favouritesResponse = (await database.listDocuments(
-        import.meta.env.VITE_APPWRITE_DATABASE_ID,
-        'favourites',
-        [
-          Query.equal(
-            'serie',
-            liveMatchesResponse.documents.map((match) => match.$id)
-          ),
-          Query.equal('user', userId)
-        ]
-      )) as Models.DocumentList<FavouriteModel>;
-
-      const favouritedSeriesIds = favouritesResponse.documents.map(
-        (favourite) => favourite.serie.$id
-      );
-
-      const liveMatchesResults: SerieWithFavourite[] =
-        liveMatchesResponse.documents.map((v) => {
-          return {
-            ...v,
-            favourited: favouritedSeriesIds.includes(v.$id)
-          };
-        });
-
-      setLiveMatches(liveMatchesResults);
-    };
-    getLiveMatches();
-  }, []);
 
   return (
     <Box

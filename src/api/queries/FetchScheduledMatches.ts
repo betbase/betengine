@@ -8,7 +8,7 @@ export const fetchScheduledMatches = async (): Promise<
   SerieWithFavourite[] | null
 > => {
   const userId = localStorage.getItem('userId');
-  if (!userId) return null;
+  const favouritedSeriesIds: string[] = [];
 
   const matchesResponse: Models.DocumentList<SerieModel> =
     await database.listDocuments(
@@ -21,31 +21,29 @@ export const fetchScheduledMatches = async (): Promise<
       ]
     );
 
-  const favouritesResponse: Models.DocumentList<FavouriteModel> =
-    await database.listDocuments(
-      import.meta.env.VITE_APPWRITE_DATABASE_ID,
-      'favourites',
-      [
-        Query.equal(
-          'serie',
-          matchesResponse.documents.map((match) => match.$id)
-        ),
-        Query.equal('user', userId)
-      ]
+  if (userId) {
+    const favouritesResponse: Models.DocumentList<FavouriteModel> =
+      await database.listDocuments(
+        import.meta.env.VITE_APPWRITE_DATABASE_ID,
+        'favourites',
+        [
+          Query.equal(
+            'serie',
+            matchesResponse.documents.map((match) => match.$id)
+          ),
+          Query.equal('user', userId)
+        ]
+      );
+
+    favouritedSeriesIds.push(
+      ...favouritesResponse.documents.map((favourite) => favourite.serie.$id)
     );
+  }
 
-  const favouritedSeriesIds = favouritesResponse.documents.map(
-    (favourite) => favourite.serie.$id
-  );
-
-  const matchesResults: SerieWithFavourite[] = matchesResponse.documents.map(
-    (v) => {
-      return {
-        ...v,
-        favourited: favouritedSeriesIds.includes(v.$id)
-      };
-    }
-  );
-
-  return matchesResults;
+  return matchesResponse.documents.map((v) => {
+    return {
+      ...v,
+      favourited: favouritedSeriesIds.includes(v.$id)
+    };
+  });
 };

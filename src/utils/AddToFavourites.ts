@@ -1,7 +1,6 @@
 import { getJwtToken } from '@/utils/GetJwtToken';
 import { SerieWithFavourite } from '@/models/SerieWithFavourite';
 import { enqueueSnackbar } from 'notistack';
-import { functions } from '@/appwrite';
 
 export const addToFavourites = async (
   match: SerieWithFavourite,

@@ -23,6 +23,8 @@ import { PredictionTypeEnum } from '@/models/PredictionTypeEnum';
 import { client } from '@/appwrite';
 import { useEffect, useState } from 'react';
 import { SerieMapModel } from '@/models/SerieMapModel';
+import { RealtimeResponseEvent } from 'appwrite';
+import { SerieModel } from '@/models/SerieModel';
 
 interface Props {
   match: SerieWithFavourite;
@@ -62,10 +64,10 @@ export const LiveMatch = ({
   useEffect(() => {
     const subscribe = client.subscribe(
       `databases.${import.meta.env.VITE_APPWRITE_DATABASE_ID}.collections.series.documents.${match.$id}`,
-      (response) => {
+      (response: RealtimeResponseEvent<SerieModel>) => {
         setHomeTeamScore(response.payload.homeTeamScore);
         setAwayTeamScore(response.payload.awayTeamScore);
-        setSerieMaps(response.payload.serieMaps);
+        setSerieMaps(response.payload.serieMaps || []);
       }
     );
 

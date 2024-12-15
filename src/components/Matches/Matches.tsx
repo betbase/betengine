@@ -1,5 +1,5 @@
 import { MatchItem } from '@/components/Matches/MatchItem';
-import { Box, CircularProgress, Skeleton } from '@mui/material';
+import { Box, CircularProgress } from '@mui/material';
 import { MatchesFilter } from '@/components/Matches/MatchesFilter';
 import { database } from '@/appwrite';
 import { useEffect, useState } from 'react';
@@ -10,7 +10,6 @@ import { SerieWithFavourite } from '@/models/SerieWithFavourite';
 
 export const Matches = () => {
   const [matches, setMatches] = useState<SerieWithFavourite[]>([]);
-  const [favourites, setFavourites] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -18,18 +17,19 @@ export const Matches = () => {
     if (!userId) return;
 
     const getMatches = async () => {
-      const matchesResponse = (await database.listDocuments(
-        import.meta.env.VITE_APPWRITE_DATABASE_ID,
-        'series',
-        [
-          Query.greaterThanEqual(
-            'startTimeScheduled',
-            new Date().toISOString()
-          ),
-          Query.orderAsc('startTimeScheduled'),
-          Query.equal('rosterReady', true)
-        ]
-      )) as Models.DocumentList<SerieModel>;
+      const matchesResponse: Models.DocumentList<SerieModel> =
+        await database.listDocuments(
+          import.meta.env.VITE_APPWRITE_DATABASE_ID,
+          'series',
+          [
+            Query.greaterThanEqual(
+              'startTimeScheduled',
+              new Date().toISOString()
+            ),
+            Query.orderAsc('startTimeScheduled'),
+            Query.equal('rosterReady', true)
+          ]
+        );
 
       const favouritesResponse = (await database.listDocuments(
         import.meta.env.VITE_APPWRITE_DATABASE_ID,
@@ -46,16 +46,16 @@ export const Matches = () => {
       const favouritedSeriesIds = favouritesResponse.documents.map(
         (favourite) => favourite.serie.$id
       );
-      setFavourites(favouritedSeriesIds);
 
-      const matchesResults = matchesResponse.documents.map((v) => {
-        return {
-          ...v,
-          favourited: favouritedSeriesIds.includes(v.$id)
-        };
-      });
+      const matchesResults: SerieWithFavourite[] =
+        matchesResponse.documents.map((v) => {
+          return {
+            ...v,
+            favourited: favouritedSeriesIds.includes(v.$id)
+          };
+        });
 
-      setMatches(matchesResults as SerieWithFavourite[]);
+      setMatches(matchesResults);
       setLoading(false);
     };
 

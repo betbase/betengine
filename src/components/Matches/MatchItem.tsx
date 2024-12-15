@@ -21,6 +21,7 @@ import { PredictionTypeEnum } from '@/models/PredictionTypeEnum';
 import { addToFavourites } from '@/utils/AddToFavourites';
 import { SerieWithFavourite } from '@/models/SerieWithFavourite';
 import { removeFromFavourites } from '@/utils/RemoveFromFavourites';
+import { useAuth } from '@/utils/AuthContext';
 
 interface Props {
   match: SerieWithFavourite;
@@ -34,6 +35,7 @@ export const MatchItem = ({
   onRemovedFromFavourites
 }: Props) => {
   const theme = useTheme();
+  const { user } = useAuth();
   const { addPrediction } = useVoteslip();
 
   const handleAddPrediction = (proposedWinner: TeamModel) => {
@@ -213,19 +215,21 @@ export const MatchItem = ({
         <MatchItemFavouriteGrid
           size={{ xs: 2 }}
           display={{ xs: 'none', md: 'flex', lg: 'none', xl: 'flex' }}>
-          <Tooltip title="Add to favourites" arrow>
-            <IconButton
-              onClick={
-                match.favourited
-                  ? () => removeFromFavourites(match, onRemovedFromFavourites)
-                  : () => addToFavourites(match, onAddedToFavourites)
-              }
-              sx={{
-                color: theme.palette.yellow.main
-              }}>
-              <StarOutlineIcon />
-            </IconButton>
-          </Tooltip>
+          {user?.$id && (
+            <Tooltip title="Add to favourites" arrow>
+              <IconButton
+                onClick={
+                  match.favourited
+                    ? () => removeFromFavourites(match, onRemovedFromFavourites)
+                    : () => addToFavourites(match, onAddedToFavourites)
+                }
+                sx={{
+                  color: theme.palette.yellow.main
+                }}>
+                <StarOutlineIcon />
+              </IconButton>
+            </Tooltip>
+          )}
         </MatchItemFavouriteGrid>
       </MatchItemContainer>
       <MatchItemViewMatchBox>

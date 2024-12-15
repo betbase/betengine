@@ -15,7 +15,9 @@ export default async ({ req, res, log, error }: any) => {
     });
   }
 
-  const authToken = req.headers['authorization']?.split('Bearer ')[1];
+  const authToken = req.headers['authorization']
+    ?.split('Bearer ')[1]
+    .split(', ')[0];
 
   if (!authToken) {
     error('Forbidden (403): Authorization token is required');
@@ -40,6 +42,8 @@ export default async ({ req, res, log, error }: any) => {
       'Access-Control-Allow-Origin': '*'
     });
   }
+
+  log(authToken);
 
   const client = new Client()
     .setEndpoint(Bun.env['APPWRITE_FUNCTION_API_ENDPOINT'])

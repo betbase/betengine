@@ -12,14 +12,23 @@ import StarOutlineIcon from '@mui/icons-material/StarOutline';
 import { TwitchPlayer } from 'react-twitch-embed';
 import { LiveChip } from '@/components/ui/LiveChip';
 import { DiamondSharp } from '@mui/icons-material';
-import { SerieModel } from '@/models/SerieModel';
 import { StreamProviderEnum } from '@/models/StreamProviderEnum';
+import { SerieWithFavourite } from '@/models/SerieWithFavourite';
+import { removeFromFavourites } from '@/utils/RemoveFromFavourites';
+import { addToFavourites } from '@/utils/AddToFavourites';
+import StarIcon from '@mui/icons-material/Star';
 
 interface Props {
-  match: SerieModel;
+  match: SerieWithFavourite;
+  onAddedToFavourites: (serieId: string) => void;
+  onRemovedFromFavourites: (serieId: string) => void;
 }
 
-export const LiveMatch = ({ match }: Props) => {
+export const LiveMatch = ({
+  match,
+  onAddedToFavourites,
+  onRemovedFromFavourites
+}: Props) => {
   const theme = useTheme();
 
   return (
@@ -43,10 +52,15 @@ export const LiveMatch = ({ match }: Props) => {
         <Box>
           <Tooltip title="Add to favourites" arrow>
             <IconButton
+              onClick={
+                match.favourited
+                  ? () => removeFromFavourites(match, onRemovedFromFavourites)
+                  : () => addToFavourites(match, onAddedToFavourites)
+              }
               sx={{
                 color: theme.palette.yellow.main
               }}>
-              <StarOutlineIcon />
+              {match.favourited ? <StarIcon /> : <StarOutlineIcon />}
             </IconButton>
           </Tooltip>
         </Box>

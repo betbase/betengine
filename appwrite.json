@@ -489,7 +489,7 @@
             "name": "crud_favourites",
             "runtime": "bun-1.1",
             "execute": [
-                "users"
+                "any"
             ],
             "events": [],
             "scopes": [

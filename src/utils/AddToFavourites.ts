@@ -2,40 +2,30 @@ import { getJwtToken } from '@/utils/GetJwtToken';
 import { SerieWithFavourite } from '@/models/SerieWithFavourite';
 import { enqueueSnackbar } from 'notistack';
 import { functions } from '@/appwrite';
-import { ExecutionMethod } from 'appwrite';
 
 export const addToFavourites = async (
   match: SerieWithFavourite,
   onAddedToFavourites: (serieId: string) => void
 ) => {
-  try {
-    const jwt = await getJwtToken();
+  const jwt = await getJwtToken();
 
-    if (!match.favourited) {
-      await functions.createExecution(
-        'crud_favourites',
-        JSON.stringify({
-          serieId: match.$id
-        }),
-        true,
-        undefined,
-        ExecutionMethod.POST,
-        {
-          'Content-Type': 'application/json',
-          authorization: `Bearer ${jwt}`
-        }
-      );
-    }
-
-    onAddedToFavourites(match.$id);
+  if (!match.favourited) {
+    const response = await fetch(import.meta.env.VITE_CRUD_FAVOURITES, {
+      method: 'POST',
+      body: JSON.stringify({ serieId: match.$id }),
+      headers: {
+        'Content-Type': 'application/json',
+        authorization: `Bearer ${jwt}`
+      }
+    });
 
     enqueueSnackbar(
-      `${match.homeTeam.name} vs ${match.awayTeam.name} added to favourites`,
-      {
-        variant: 'success'
-      }
+      response.ok
+        ? `${match.homeTeam.name} vs ${match.awayTeam.name} added to favourites`
+        : `Could not add ${match.homeTeam.name} vs ${match.awayTeam.name} to favourites`,
+      { variant: response.ok ? 'success' : 'error' }
     );
-  } catch {
-    enqueueSnackbar('Error adding to favourites', { variant: 'error' });
+
+    if (response.ok) onAddedToFavourites(match.$id);
   }
 };

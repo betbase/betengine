@@ -17,6 +17,7 @@ createRoot(document.getElementById('root')!).render(
         fontWeight: 600
       }}
       TransitionComponent={Grow}
+      autoHideDuration={3000}
       anchorOrigin={{
         horizontal: 'right',
         vertical: 'bottom'

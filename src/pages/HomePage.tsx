@@ -1,6 +1,6 @@
 import { LiveMatch } from '@/components/LiveMatch/LiveMatch';
 import { Matches } from '@/components/Matches/Matches';
-import { Box } from '@mui/material';
+import { Box, Skeleton } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { SerieWithFavourite } from '@/models/SerieWithFavourite';
 import { useQuery } from '@tanstack/react-query';
@@ -10,7 +10,7 @@ import Carousel from 'react-material-ui-carousel';
 export const HomePage = () => {
   const [liveMatches, setLiveMatches] = useState<SerieWithFavourite[]>([]);
 
-  const { data } = useQuery({
+  const { data, isFetching } = useQuery({
     queryKey: ['liveMatches'],
     queryFn: fetchLiveMatches,
     refetchOnWindowFocus: false
@@ -43,6 +43,7 @@ export const HomePage = () => {
         flexDirection: 'column',
         rowGap: '1rem'
       }}>
+      {isFetching && <Skeleton height="300px" />}
       {liveMatches?.length > 0 && (
         <Carousel autoPlay={false}>
           {liveMatches.map((match) => (
@@ -55,7 +56,6 @@ export const HomePage = () => {
           ))}
         </Carousel>
       )}
-
       <Matches />
     </Box>
   );

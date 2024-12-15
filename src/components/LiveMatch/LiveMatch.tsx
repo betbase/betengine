@@ -25,6 +25,7 @@ import { useEffect, useState } from 'react';
 import { SerieMapModel } from '@/models/SerieMapModel';
 import { RealtimeResponseEvent } from 'appwrite';
 import { SerieModel } from '@/models/SerieModel';
+import { Link } from 'react-router-dom';
 
 interface Props {
   match: SerieWithFavourite;
@@ -112,7 +113,13 @@ export const LiveMatch = ({
       </LiveMatchHeader>
 
       <Grid container spacing={2} padding={2}>
-        <Grid size={{ xs: 12, lg: 6 }}>
+        <Grid
+          size={{ xs: 12, lg: 6 }}
+          sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center'
+          }}>
           {match?.streamProvider === StreamProviderEnum.Twitch &&
             match?.streamChannel && (
               <TwitchPlayer
@@ -122,6 +129,11 @@ export const LiveMatch = ({
                 height="300px"
               />
             )}
+          {(!match?.streamProvider || !match?.streamChannel) && (
+            <Typography variant="body1" fontWeight={600} textAlign="center">
+              No stream available
+            </Typography>
+          )}
         </Grid>
 
         <Grid size={{ xs: 12, lg: 6 }}>
@@ -135,13 +147,13 @@ export const LiveMatch = ({
             }}>
             {/* TODO: Might not be needed */}
             {/*<Typography*/}
-            {/*  variant="h6"*/}
+            {/*  variant="body1"*/}
             {/*  fontWeight={600}*/}
             {/*  textAlign="center"*/}
             {/*  sx={{*/}
             {/*    mb: '1rem'*/}
             {/*  }}>*/}
-            {/*  2022 QH Sports Dota 2 Series 3*/}
+            {/*  {new Date(match.startTimeScheduled).toLocaleString()}*/}
             {/*</Typography>*/}
 
             <Grid
@@ -225,6 +237,17 @@ export const LiveMatch = ({
           </Box>
         </Grid>
       </Grid>
+      <Link to={`/matches/${match.$id}`}>
+        <Button
+          color="primary"
+          variant="contained"
+          sx={{
+            width: '100%',
+            fontWeight: 600
+          }}>
+          View Match
+        </Button>
+      </Link>
     </Box>
   );
 };

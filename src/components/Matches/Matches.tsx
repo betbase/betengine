@@ -12,26 +12,26 @@ export const Matches = () => {
   const [matches, setMatches] = useState<SerieWithFavourite[]>([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
+  const getMatches = async () => {
     const userId = localStorage.getItem('userId');
     if (!userId) return;
 
-    const getMatches = async () => {
-      const matchesResponse: Models.DocumentList<SerieModel> =
-        await database.listDocuments(
-          import.meta.env.VITE_APPWRITE_DATABASE_ID,
-          'series',
-          [
-            Query.greaterThanEqual(
-              'startTimeScheduled',
-              new Date().toISOString()
-            ),
-            Query.orderAsc('startTimeScheduled'),
-            Query.equal('rosterReady', true)
-          ]
-        );
+    const matchesResponse: Models.DocumentList<SerieModel> =
+      await database.listDocuments(
+        import.meta.env.VITE_APPWRITE_DATABASE_ID,
+        'series',
+        [
+          Query.greaterThanEqual(
+            'startTimeScheduled',
+            new Date().toISOString()
+          ),
+          Query.orderAsc('startTimeScheduled'),
+          Query.equal('rosterReady', true)
+        ]
+      );
 
-      const favouritesResponse = (await database.listDocuments(
+    const favouritesResponse: Models.DocumentList<FavouriteModel> =
+      await database.listDocuments(
         import.meta.env.VITE_APPWRITE_DATABASE_ID,
         'favourites',
         [
@@ -41,24 +41,26 @@ export const Matches = () => {
           ),
           Query.equal('user', userId)
         ]
-      )) as Models.DocumentList<FavouriteModel>;
-
-      const favouritedSeriesIds = favouritesResponse.documents.map(
-        (favourite) => favourite.serie.$id
       );
 
-      const matchesResults: SerieWithFavourite[] =
-        matchesResponse.documents.map((v) => {
-          return {
-            ...v,
-            favourited: favouritedSeriesIds.includes(v.$id)
-          };
-        });
+    const favouritedSeriesIds = favouritesResponse.documents.map(
+      (favourite) => favourite.serie.$id
+    );
 
-      setMatches(matchesResults);
-      setLoading(false);
-    };
+    const matchesResults: SerieWithFavourite[] = matchesResponse.documents.map(
+      (v) => {
+        return {
+          ...v,
+          favourited: favouritedSeriesIds.includes(v.$id)
+        };
+      }
+    );
 
+    setMatches(matchesResults);
+    setLoading(false);
+  };
+
+  useEffect(() => {
     getMatches();
   }, []);
 

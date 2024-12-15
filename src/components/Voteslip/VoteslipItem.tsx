@@ -9,8 +9,8 @@ import {
 } from '@mui/material';
 import { Add, Close, Remove } from '@mui/icons-material';
 import { MatchPrediction, useVoteslip } from '@/utils/VoteslipContext';
-import { useState } from 'react';
-import { PREDICTION_STAKE_STEP } from '@/config';
+import { MIN_PREDICTION_STAKE, PREDICTION_STAKE_STEP } from '@/config';
+import { enqueueSnackbar } from 'notistack';
 
 interface Props {
   prediction: MatchPrediction;
@@ -20,9 +20,14 @@ export const VoteslipItem = ({ prediction }: Props) => {
   const theme = useTheme();
   const { updatePrediction, removePrediction } = useVoteslip();
 
-
   const handleReduceStake = () => {
-    if (prediction.stake >= PREDICTION_STAKE_STEP) {
+    if ((prediction.stake - PREDICTION_STAKE_STEP) < MIN_PREDICTION_STAKE) {
+      enqueueSnackbar(`Minimum stake is ${MIN_PREDICTION_STAKE}`, {
+        variant: 'warning'
+      })
+    }
+
+    if (prediction.stake >= PREDICTION_STAKE_STEP && (prediction.stake - PREDICTION_STAKE_STEP) >= MIN_PREDICTION_STAKE) {
       updatePrediction(
         prediction.serie.$id,
         prediction.proposedWinner.$id,
@@ -49,7 +54,7 @@ export const VoteslipItem = ({ prediction }: Props) => {
             textAlign: 'center',
             fontSize: '1rem'
           }}>
-          Match Winner
+          {prediction.predictionType}
         </Typography>
         <IconButton
           onClick={() => removePrediction(prediction.serie.$id, prediction.proposedWinner.$id)}

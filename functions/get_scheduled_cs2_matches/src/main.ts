@@ -71,7 +71,10 @@ export default async ({ req, res, log, error }) => {
   const tournamentIds = new Set<string>();
   const tournaments = series
     .map((serie) => serie.tournament)
-    .filter((tournament) => !tournamentIds.has(tournament.id) && tournamentIds.add(tournament.id));
+    .filter(
+      (tournament) =>
+        !tournamentIds.has(tournament.id) && tournamentIds.add(tournament.id)
+    );
 
   const teamsIds = new Set<string>();
   const teams = series
@@ -156,7 +159,7 @@ export default async ({ req, res, log, error }) => {
       logoUrl: tournament.logoUrl,
       startDate: tournament.startDate,
       endDate: tournament.endDate,
-      prizePool: tournament.prizePool.amount
+      prizePool: tournament?.prizePool?.amount || 0
     };
 
     if (!tournamentDocument) {
@@ -206,7 +209,10 @@ export default async ({ req, res, log, error }) => {
         homeTeamScore: document?.homeTeamScore || 0,
         awayTeam: serie.teams[1].baseInfo.id,
         awayTeamScore: document?.awayTeamScore || 0,
-        rosterReady: !(serie.teams[0].baseInfo.name === 'TBD-1' || serie.teams[1].baseInfo.name === 'TBD-2'),
+        rosterReady: !(
+          serie.teams[0].baseInfo.name === 'TBD-1' ||
+          serie.teams[1].baseInfo.name === 'TBD-2'
+        ),
         tournament: serie.tournament.id
       };
 

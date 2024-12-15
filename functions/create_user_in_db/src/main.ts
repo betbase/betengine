@@ -1,4 +1,4 @@
-import { Client, Databases, Users } from 'node-appwrite';
+import { Client, Databases, Permission, Role, Users } from 'node-appwrite';
 
 import * as crypto from 'crypto';
 import { Models } from 'appwrite';
@@ -89,12 +89,18 @@ export default async ({ req, res, log, error }: any) => {
 
   // If not, create a new user in the database
   try {
-    await database.createDocument(Bun.env['DATABASE_ID'], 'users', data.$id, {
-      currency: 0,
-      correctPredictions: 0,
-      wrongPredictions: 0,
-      signupBonusClaimed: false,
-    });
+    await database.createDocument(
+      Bun.env['DATABASE_ID'],
+      'users',
+      data.$id,
+      {
+        currency: 0,
+        correctPredictions: 0,
+        wrongPredictions: 0,
+        signupBonusClaimed: false
+      },
+      [Permission.read(Role.user(data.$id))]
+    );
     log(`User ${data.$id} created in database.`);
     return res.json({ message: 'User created in database' });
   } catch (e) {

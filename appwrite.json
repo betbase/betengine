@@ -483,6 +483,27 @@
             "entrypoint": "src/main.ts",
             "commands": "bun install --production --frozen-lockfile",
             "path": "functions/create_user_in_db"
+        },
+        {
+            "$id": "crud_favourites",
+            "name": "crud_favourites",
+            "runtime": "bun-1.1",
+            "execute": [
+                "users"
+            ],
+            "events": [],
+            "scopes": [
+                "users.read",
+                "documents.read",
+                "documents.write"
+            ],
+            "schedule": "",
+            "timeout": 15,
+            "enabled": true,
+            "logging": true,
+            "entrypoint": "src/main.ts",
+            "commands": "bun install --production --frozen-lockfile",
+            "path": "functions/crud_favourites"
         }
     ]
 }

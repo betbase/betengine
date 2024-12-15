@@ -67,7 +67,7 @@ export default async ({ req, res, log, error }) => {
           logoUrl: data.tournament.logoUrl,
           startDate: data.tournament.startDate,
           endDate: data.tournament.endDate,
-          prizePool: data.tournament.prizePool.amount
+          prizePool: data.tournament?.prizePool?.amount || 0
         }
       );
 

@@ -1,10 +1,14 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { SerieModel } from '@/models/SerieModel';
 import { TeamModel } from '@/models/TeamModel';
+import { PredictionTypeEnum } from '@/models/PredictionTypeEnum';
+import { MAX_PREDICTIONS_PER_SLIP } from '@/config';
+import { enqueueSnackbar } from 'notistack';
 
 export interface MatchPrediction {
   serie: SerieModel;
   proposedWinner: TeamModel;
+  predictionType: PredictionTypeEnum;
   stake: number;
 }
 
@@ -43,6 +47,13 @@ export const VoteslipProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const addPrediction = (prediction: MatchPrediction) => {
     setPredictions((prevPredictions) => {
+      if (prevPredictions.length === MAX_PREDICTIONS_PER_SLIP) {
+        enqueueSnackbar(`You can have a maximum of 5 predictions per slip`, {
+          variant: 'warning'
+        });
+        return prevPredictions;
+      }
+
       const exists = prevPredictions.some(
         (p) =>
           p.serie.$id === prediction.serie.$id &&
@@ -50,8 +61,10 @@ export const VoteslipProvider: React.FC<{ children: React.ReactNode }> = ({
       );
 
       if (!exists) {
+        enqueueSnackbar('Prediction added to slip', { variant: 'success' });
         return [...prevPredictions, prediction];
       }
+
       return prevPredictions;
     });
   };

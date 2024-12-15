@@ -3,6 +3,7 @@ import { SerieFormatEnum } from '@/models/SerieFormatEnum';
 import { GameModel } from '@/models/GameModel';
 import { TeamModel } from '@/models/TeamModel';
 import { TournamentModel } from '@/models/Tournament';
+import { StreamProviderEnum } from '@/models/StreamProviderEnum';
 
 export interface SerieModel extends Models.Document {
   game: GameModel;
@@ -21,4 +22,6 @@ export interface SerieModel extends Models.Document {
   awayTeam: TeamModel;
   rosterReady: boolean;
   tournament: TournamentModel;
+  streamChannel?: string | null;
+  streamProvider?: StreamProviderEnum | null;
 }

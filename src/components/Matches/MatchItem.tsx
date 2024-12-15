@@ -9,28 +9,39 @@ import {
   useTheme
 } from '@mui/material';
 import { storage } from '@/appwrite';
-import { LiveChip } from '@/components/ui/LiveChip';
 import { ScheduledChip } from '@/components/ui/ScheduledChip';
 import { Link } from 'react-router-dom';
 import StarOutlineIcon from '@mui/icons-material/StarOutline';
+import StarIcon from '@mui/icons-material/Star';
 import { DiamondSharp } from '@mui/icons-material';
 import { SerieModel } from '@/models/SerieModel';
 import { MatchPrediction, useVoteslip } from '@/utils/VoteslipContext';
 import { TeamModel } from '@/models/TeamModel';
+import { PredictionTypeEnum } from '@/models/PredictionTypeEnum';
+import { addToFavourites } from '@/utils/AddToFavourites';
+import { SerieWithFavourite } from '@/models/SerieWithFavourite';
+import { removeFromFavourites } from '@/utils/RemoveFromFavourites';
 
 interface Props {
-  match: SerieModel;
+  match: SerieWithFavourite;
+  onAddedToFavourites: (serieId: string) => void;
+  onRemovedFromFavourites: (serieId: string) => void;
 }
 
-export const MatchItem = ({ match }: Props) => {
+export const MatchItem = ({
+  match,
+  onAddedToFavourites,
+  onRemovedFromFavourites
+}: Props) => {
   const theme = useTheme();
   const { addPrediction } = useVoteslip();
 
   const handleAddPrediction = (proposedWinner: TeamModel) => {
     const prediction: MatchPrediction = {
       serie: match,
+      predictionType: PredictionTypeEnum.MATCH_WINNER,
       proposedWinner: proposedWinner,
-      stake: 0
+      stake: 10
     };
 
     addPrediction(prediction);
@@ -72,10 +83,15 @@ export const MatchItem = ({ match }: Props) => {
         <Box display={TournamentGridMediaQueries}>
           <Tooltip title="Add to favourites" arrow>
             <IconButton
+              onClick={
+                match.favourited
+                  ? () => removeFromFavourites(match, onRemovedFromFavourites)
+                  : () => addToFavourites(match, onAddedToFavourites)
+              }
               sx={{
                 color: theme.palette.yellow.main
               }}>
-              <StarOutlineIcon />
+              {match.favourited ? <StarIcon /> : <StarOutlineIcon />}
             </IconButton>
           </Tooltip>
         </Box>
@@ -199,6 +215,11 @@ export const MatchItem = ({ match }: Props) => {
           display={{ xs: 'none', md: 'flex', lg: 'none', xl: 'flex' }}>
           <Tooltip title="Add to favourites" arrow>
             <IconButton
+              onClick={
+                match.favourited
+                  ? () => removeFromFavourites(match, onRemovedFromFavourites)
+                  : () => addToFavourites(match, onAddedToFavourites)
+              }
               sx={{
                 color: theme.palette.yellow.main
               }}>

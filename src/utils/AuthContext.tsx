@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { account } from '@/appwrite';
 import { Models, OAuthProvider, AppwriteException, ID } from 'appwrite';
+import { jwtDecode } from 'jwt-decode';
 
 interface AuthContextType {
   user: Models.User<Models.Preferences> | null;
@@ -109,14 +110,18 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     try {
       setError(null);
       setProcessing(true);
+
       await account.createOAuth2Session(
         provider,
         'http://localhost:3000/',
         'http://localhost:3000/auth/login'
         // getScopes(provider)
       );
+
       const user = await account.get();
       setUser(user);
+      localStorage.setItem('userId', user.$id);
+
       setProcessing(false);
     } catch (e: unknown) {
       console.error(error);
@@ -136,9 +141,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     try {
       setError(null);
       setProcessing(true);
+
       await account.createEmailPasswordSession(email, password);
+
       const user = await account.get();
       setUser(user);
+      localStorage.setItem('userId', user.$id);
+
       setProcessing(false);
     } catch (e: unknown) {
       console.error(e);
@@ -160,9 +169,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
       await account.create(ID.unique(), email, password, username);
       await account.createEmailPasswordSession(email, password);
-      const user = await account.get();
 
+      const user = await account.get();
       setUser(user);
+      localStorage.setItem('userId', user.$id);
+
       setProcessing(false);
     } catch (e: unknown) {
       console.error(e);
@@ -176,6 +187,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   const logout = async () => {
     try {
       await account.deleteSession('current');
+      localStorage.clear();
       setUser(null);
     } catch (e: unknown) {
       console.error(e);

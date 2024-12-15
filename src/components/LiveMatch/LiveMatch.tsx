@@ -12,8 +12,14 @@ import StarOutlineIcon from '@mui/icons-material/StarOutline';
 import { TwitchPlayer } from 'react-twitch-embed';
 import { LiveChip } from '@/components/ui/LiveChip';
 import { DiamondSharp } from '@mui/icons-material';
+import { SerieModel } from '@/models/SerieModel';
+import { StreamProviderEnum } from '@/models/StreamProviderEnum';
 
-export const LiveMatch = () => {
+interface Props {
+  match: SerieModel;
+}
+
+export const LiveMatch = ({ match }: Props) => {
   const theme = useTheme();
 
   return (
@@ -31,7 +37,7 @@ export const LiveMatch = () => {
           }}>
           <LiveChip />
           <Typography variant="h6" fontWeight={600}>
-            2022 QH Sports Dota 2 Series 3 - Team 1 vs. Team 2
+            {match.tournament.nameShortened}
           </Typography>
         </Box>
         <Box>
@@ -48,12 +54,15 @@ export const LiveMatch = () => {
 
       <Grid container spacing={2} padding={2}>
         <Grid size={{ xs: 12, lg: 6 }}>
-          {/*<TwitchPlayer*/}
-          {/*  channel="hasanabi"*/}
-          {/*  parent={['localhost']}*/}
-          {/*  width="100%"*/}
-          {/*  height="300px"*/}
-          {/*/>*/}
+          {match?.streamProvider === StreamProviderEnum.Twitch &&
+            match?.streamChannel && (
+              <TwitchPlayer
+                channel={match.streamChannel}
+                parent={['localhost']}
+                width="100%"
+                height="300px"
+              />
+            )}
         </Grid>
 
         <Grid size={{ xs: 12, lg: 6 }}>
@@ -65,15 +74,16 @@ export const LiveMatch = () => {
               justifyContent: 'center',
               height: '100%'
             }}>
-            <Typography
-              variant="h6"
-              fontWeight={600}
-              textAlign="center"
-              sx={{
-                mb: '1rem'
-              }}>
-              2022 QH Sports Dota 2 Series 3
-            </Typography>
+            {/* TODO: Might not be needed */}
+            {/*<Typography*/}
+            {/*  variant="h6"*/}
+            {/*  fontWeight={600}*/}
+            {/*  textAlign="center"*/}
+            {/*  sx={{*/}
+            {/*    mb: '1rem'*/}
+            {/*  }}>*/}
+            {/*  2022 QH Sports Dota 2 Series 3*/}
+            {/*</Typography>*/}
 
             <Grid
               container
@@ -81,9 +91,9 @@ export const LiveMatch = () => {
                 width: '100%'
               }}>
               <Team size={4}>
-                <img src="https://placehold.co/80" alt="Team A" />
+                <img src={match.homeTeam?.logoUrl} alt="Team A" height="64px" />
                 <Typography variant="h6" fontWeight={600}>
-                  Team A
+                  {match.homeTeam.name}
                 </Typography>
                 <Button color="primary" variant="outlined">
                   Vote{' '}
@@ -103,7 +113,7 @@ export const LiveMatch = () => {
                     mb: '0.25rem',
                     fontFamily: "'Iperion W00', sans-serif"
                   }}>
-                  2 : 1
+                  {match.homeTeamScore} : {match.awayTeamScore}
                 </Typography>
                 <LiveChip />
                 <Box
@@ -131,9 +141,9 @@ export const LiveMatch = () => {
                 </Box>
               </Score>
               <Team size={4}>
-                <img src="https://placehold.co/80" alt="Team B" />
+                <img src={match.awayTeam?.logoUrl} alt="Team B" height="64px" />
                 <Typography variant="h6" fontWeight={600}>
-                  Team B
+                  {match.awayTeam.name}
                 </Typography>
                 <Button color="primary" variant="outlined">
                   Vote{' '}

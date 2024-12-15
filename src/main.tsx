@@ -10,30 +10,30 @@ import { VoteslipProvider } from '@/utils/VoteslipContext';
 import { SnackbarProvider } from 'notistack';
 
 createRoot(document.getElementById('root')!).render(
-  // <StrictMode>
-  <SnackbarProvider
-    maxSnack={1}
-    style={{
-      fontWeight: 600
-    }}
-    TransitionComponent={Grow}
-    anchorOrigin={{
-      horizontal: 'right',
-      vertical: 'bottom'
-    }}>
-    <AuthProvider>
-      <VoteslipProvider>
-        <ThemeProvider theme={theme}>
-          <CssBaseline />
-          <RouterProvider
-            router={router}
-            future={{
-              v7_startTransition: true
-            }}
-          />
-        </ThemeProvider>
-      </VoteslipProvider>
-    </AuthProvider>
-  </SnackbarProvider>
-  // </StrictMode>
+  <StrictMode>
+    <SnackbarProvider
+      maxSnack={1}
+      style={{
+        fontWeight: 600
+      }}
+      TransitionComponent={Grow}
+      anchorOrigin={{
+        horizontal: 'right',
+        vertical: 'bottom'
+      }}>
+      <AuthProvider>
+        <VoteslipProvider>
+          <ThemeProvider theme={theme}>
+            <CssBaseline />
+            <RouterProvider
+              router={router}
+              future={{
+                v7_startTransition: true
+              }}
+            />
+          </ThemeProvider>
+        </VoteslipProvider>
+      </AuthProvider>
+    </SnackbarProvider>
+  </StrictMode>
 );

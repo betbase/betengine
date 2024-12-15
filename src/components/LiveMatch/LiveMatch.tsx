@@ -35,8 +35,6 @@ export const LiveMatch = ({
   const theme = useTheme();
   const { addPrediction } = useVoteslip();
 
-  console.log(match);
-
   const handleAddPrediction = (proposedWinner: TeamModel) => {
     const prediction: MatchPrediction = {
       serie: match,
@@ -157,15 +155,22 @@ export const LiveMatch = ({
                     mt: '1rem',
                     gap: '0.25rem'
                   }}>
-                  {match.serieMaps?.map((map, index) => (
-                    <Typography
-                      key={index}
-                      variant="body2"
-                      color={theme.palette.text.secondary}
-                      fontWeight={600}>
-                      | {map.mapName.toUpperCase()} |
-                    </Typography>
-                  ))}
+                  {match.serieMaps
+                    ?.sort((a, b) => Number(b.finished) - Number(a.finished))
+                    .map((map, index) => (
+                      <Typography
+                        key={index}
+                        variant="body2"
+                        color={
+                          map.finished
+                            ? theme.palette.text.secondary
+                            : theme.palette.white.toString()
+                        }
+                        fontWeight={600}>
+                        {map.homeTeamScore} | {map.mapName.toUpperCase()} |{' '}
+                        {map.awayTeamScore}
+                      </Typography>
+                    ))}
                 </Box>
               </Score>
               <Team size={4}>

@@ -25,5 +25,5 @@ export interface SerieModel extends Models.Document {
   tournament: TournamentModel;
   streamChannel?: string | null;
   streamProvider?: StreamProviderEnum | null;
-  seriesMaps?: SerieMapModel[];
+  serieMaps?: SerieMapModel[];
 }
